@@ -1211,6 +1211,7 @@
 				DEVELOPMENT_TEAM = D5YL7UF3L9;
 				INFOPLIST_FILE = HourlyApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				NEW_SETTING = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1230,6 +1231,7 @@
 				DEVELOPMENT_TEAM = D5YL7UF3L9;
 				INFOPLIST_FILE = HourlyApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				NEW_SETTING = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

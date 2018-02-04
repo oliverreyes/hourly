@@ -1,0 +1,26 @@
+dependencies: \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTJavaScriptLoader.mm \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTJavaScriptLoader.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTDefines.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/ios/build/Build/Products/Debug-iphonesimulator/include/cxxreact/JSBundleType.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/ios/build/Build/Products/Debug-iphonesimulator/include/jschelpers/JavaScriptCore.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/ios/build/Build/Products/Debug-iphonesimulator/include/jschelpers/JSCWrapper.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTBridge.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTBridgeDelegate.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTBridgeModule.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTFrameUpdate.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTInvalidating.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTConvert.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Views/RCTAnimationType.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Views/RCTBorderStyle.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTLog.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTAssert.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTUtils.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Views/RCTPointerEvents.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Views/RCTTextDecorationLineType.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTMultipartDataTask.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTMultipartStreamReader.h \
+  /Users/OliverReyes/Documents/CS/React-Native/HourlyApp/node_modules/react-native/React/Base/RCTPerformanceLogger.h
