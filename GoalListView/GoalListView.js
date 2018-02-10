@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
+import Footer from '../Components/Footer';
 
 
 class GoalListView extends React.Component {

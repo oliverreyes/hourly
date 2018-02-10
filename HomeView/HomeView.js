@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import Footer from '../Footer';
+import Footer from '../Components/Footer';
 
 
 class HomeView extends React.Component {
