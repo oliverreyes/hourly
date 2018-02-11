@@ -23,3 +23,15 @@ const Navigator = StackNavigator(
 );
 
 export default Navigator;
+
+/*
+navigationOptions: {
+  headerStyle: {
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    top: 0,
+    left: 0,
+    right: 0
+  }
+}
+*/
