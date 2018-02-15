@@ -19,12 +19,14 @@ export default class SwipeableListContainer extends React.Component {
     });
   }
   render() {
+    const num = 1;
     return (
       <FlatList
           data={this.state.data}
+          ListHeaderComponent={<Text style={styles.header}>Tasks</Text>}
           ItemSeparatorComponent={() => <Separator />}
           renderItem={({item}) =>
-            <SwipeableListItem item={item} />
+            <SwipeableListItem item={item} id={num} navigation={this.props.navigation} />
           }
 
         />
@@ -32,3 +34,11 @@ export default class SwipeableListContainer extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  header: {
+    fontSize: 50,
+    fontWeight: 'bold',
+
+  }
+});

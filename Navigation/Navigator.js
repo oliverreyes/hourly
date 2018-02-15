@@ -1,30 +1,23 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { StackNavigator } from 'react-navigation';
-import TaskListView from '../TaskListView/TaskListView';
+import { TabNavigator, StackNavigator } from 'react-navigation';
+//import TaskListView from '../TaskListView/TaskListView';
 import GoalListView from '../GoalListView/GoalListView';
 import HomeView from '../HomeView/HomeView';
+//import TaskView from '../TaskListView/TaskView/TaskView';
+import TaskStack from './TaskStack';
 
-const Navigator = StackNavigator(
+const Navigator =  TabNavigator(
   {
-    Home: {
-      screen: HomeView,
-    },
-    Goals: {
-      screen: GoalListView,
-    },
-    Tasks: {
-      screen: TaskListView,
-    }
-  },
-  {
-    initialRouteName: 'Tasks'
+    Home: { screen: HomeView },
+    Goals: { screen: GoalListView },
+    Tasks: { screen: TaskStack },
   }
 );
 
 export default Navigator;
 
 /*
+
+
 navigationOptions: {
   headerStyle: {
     position: 'absolute',

@@ -8,22 +8,21 @@ class TaskListView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Tasks</Text>
-        <SwipeableListContainer data={[
-          {key: 'Wash Car'},
-          {key: 'Get Haircut'},
-          {key: 'Deposit $ at bank'},
-          {key: 'Get some Headspace'},
-          {key: 'Go to gym'},
-          {key: 'Buy groceries'},
-          {key: 'Pay off card'},
-          {key: 'Watch boxing vids'},
-        ]}
+        <SwipeableListContainer
+          data={[
+            {key: 'Wash Car'},
+            {key: 'Get Haircut'},
+            {key: 'Deposit $ at bank'},
+            {key: 'Get some Headspace'},
+            {key: 'Go to gym'},
+            {key: 'Buy groceries'},
+            {key: 'Pay off card'},
+            {key: 'Watch boxing vids'},
+          ]}
+          navigation={this.props.navigation}
         />
-
-
-        <Footer />
       </View>
+
 
     );
   }
@@ -40,3 +39,7 @@ const styles = StyleSheet.create({
 });
 
 export default TaskListView;
+
+/*
+
+*/

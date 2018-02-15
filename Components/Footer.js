@@ -4,22 +4,23 @@ import { withNavigation } from 'react-navigation';
 
 class Footer extends React.Component {
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View
         style={styles.footer_container}>
         <Button
           title="Home"
-          onPress={() => this.props.navigation.navigate('Home')}
+          onPress={() => navigate('Home')}
           color="white"
         />
         <Button
           title="Goals"
-          onPress={() => this.props.navigation.navigate('Goals')}
+          onPress={() => navigate('Goals')}
           color="white"
         />
         <Button
           title="Tasks"
-          onPress={() => this.props.navigation.navigate('Tasks')}
+          onPress={() => navigate('Tasks')}
           color="white"
         />
       </View>
