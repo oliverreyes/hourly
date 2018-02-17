@@ -10,14 +10,14 @@ class TaskListView extends React.Component {
       <View style={styles.container}>
         <SwipeableListContainer
           data={[
-            {key: 'Wash Car'},
-            {key: 'Get Haircut'},
-            {key: 'Deposit $ at bank'},
-            {key: 'Get some Headspace'},
-            {key: 'Go to gym'},
-            {key: 'Buy groceries'},
-            {key: 'Pay off card'},
-            {key: 'Watch boxing vids'},
+            {key: 'Wash Car', deadline: 'Tomorrow', notifications: true, repeat: 'monthly', notes: 'Bring cash'},
+            {key: 'Get Haircut', deadline: '8PM', notifications: true, repeat: 'biweekly', notes: 'Bring cash'},
+            {key: 'Deposit $ at bank', deadline: 'Friday, 9AM', notifications: true, repeat: 'none', notes: 'Chase'},
+            {key: 'Get some Headspace', deadline: '9PM', notifications: true, repeat: 'daily', notes: ''},
+            {key: 'Go to gym', deadline: 'Tomorrow, 8AM', notifications: false, repeat: 'daily', notes: 'Bring ID'},
+            {key: 'Buy groceries', deadline: 'Tomorrow, 1PM', notifications: false, repeat: '', notes: 'loofah'},
+            {key: 'Pay off card', deadline: 'Monday, 9PM', notifications: true, repeat: 'weekly', notes: ''},
+            {key: 'Watch boxing vids', deadline: 'Wed, 5PM', notifications: true, repeat: 'weekly', notes: 'Practice'},
           ]}
           navigation={this.props.navigation}
         />
