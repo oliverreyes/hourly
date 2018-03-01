@@ -74,7 +74,3 @@ fi
 if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
     hash -r
 fi
-
-# Added in
-export FLASK_APP=hourly.py
-export DATABASE_URL="postgresql://localhost/hourly_db"

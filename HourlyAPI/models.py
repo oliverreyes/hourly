@@ -8,3 +8,14 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(64), index=True)
+    deadline = db.Column(db.DateTime, index=True)
+    notifications = db.Column(db.Boolean)
+    repeat = db.Column(db.Boolean)
+    notes = db.Column(db.Text)
+
+    def __repr__(self):
+        return '<Task {}'.format(self.title)

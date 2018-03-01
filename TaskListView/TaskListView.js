@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import Footer from '../Components/Footer';
-import SwipeableListContainer from '../Components/List/SwipeableListContainer'
+import SwipeableListContainer from '../Components/List/SwipeableListContainer';
 
 
 class TaskListView extends React.Component {
@@ -39,7 +38,3 @@ const styles = StyleSheet.create({
 });
 
 export default TaskListView;
-
-/*
-
-*/
