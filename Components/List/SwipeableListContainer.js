@@ -7,11 +7,12 @@ export default class SwipeableListContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      scroll_active: true,
-      data: this.props.data
+      scroll_active: true
     };
     this.enableScroll = this.enableScroll.bind(this);
   }
+  // Need to turn key id into a String
+  _keyExtractor = (item, index) => item.id.toString();
 
   enableScroll(scroll_active) {
     this.setState({
@@ -19,14 +20,16 @@ export default class SwipeableListContainer extends React.Component {
     });
   }
   render() {
+    console.log(this.props.data);
     return (
       <FlatList
-          data={this.state.data}
+          data={this.props.data}
           ListHeaderComponent={<Text style={styles.header}>Tasks</Text>}
           ItemSeparatorComponent={() => <Separator />}
           renderItem={({item}) =>
             <SwipeableListItem item={item} navigation={this.props.navigation} />
           }
+          keyExtractor={this._keyExtractor}
 
         />
 

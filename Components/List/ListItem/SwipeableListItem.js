@@ -3,24 +3,22 @@ import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 
 export default class SwipeableListItem extends React.Component {
   render() {
-    const {navigate} = this.props.navigation;
-    const {key} = this.props.item;
-    const {deadline} = this.props.item;
-    const {notifications} = this.props.item;
-    const {repeat} = this.props.item;
-    const {notes} = this.props.item;
     console.log(this.props.item);
+    const {navigate} = this.props.navigation;
+    const {title, notifications, repeat} = this.props.item;
+    const deadline = (this.props.item.deadline ? this.props.item.deadline : "");
+    const notes = (this.props.item.notes ? this.props.item.notes : "");
     return (
       <View style={styles.list_box}>
         <TouchableHighlight onPress={() => navigate('TaskView', {
-            text: key,
+            text: title,
             deadline: deadline,
             notifications: notifications,
             repeat: repeat,
             notes: notes,
           }
         )}>
-          <Text style={styles.list_text}>{key}</Text>
+          <Text style={styles.list_text}>{title}</Text>
         </TouchableHighlight>
       </View>
     );
