@@ -1,5 +1,6 @@
-from HourlyAPI import db
+from HourlyAPI import db, ma
 
+# SQLAlchemy Models
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -19,3 +20,12 @@ class Task(db.Model):
 
     def __repr__(self):
         return '<Task {}'.format(self.title)
+
+# Marshmallow Schemas based on above models
+class UserSchema(ma.ModelSchema):
+    class Meta:
+        model = User
+
+class TaskSchema(ma.ModelSchema):
+    class Meta:
+        model = Task
