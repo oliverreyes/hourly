@@ -28,10 +28,11 @@ export default class SwipeableListItem extends React.Component {
 const styles = StyleSheet.create({
   list_box: {
     alignSelf: 'stretch',
-    paddingVertical: 10
+    paddingVertical: 10,
+    flex: 1
   },
   list_text: {
-    fontSize: 50,
+    fontSize: 28,
     textAlign: 'right',
     alignSelf: 'stretch',
     overflow: 'scroll'

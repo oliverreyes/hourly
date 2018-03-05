@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 import Separator from './Separator';
 import SwipeableListItem from './ListItem/SwipeableListItem';
+import InputListItem from './ListItem/InputListItem';
 
 export default class SwipeableListContainer extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ export default class SwipeableListContainer extends React.Component {
     console.log(this.props.data);
     return (
       <FlatList
+          style={styles.list_style}
           data={this.props.data}
           ListHeaderComponent={<Text style={styles.header}>Tasks</Text>}
           ItemSeparatorComponent={() => <Separator />}
@@ -30,6 +32,7 @@ export default class SwipeableListContainer extends React.Component {
             <SwipeableListItem item={item} navigation={this.props.navigation} />
           }
           keyExtractor={this._keyExtractor}
+          ListFooterComponent={<InputListItem />}
 
         />
 
@@ -38,8 +41,11 @@ export default class SwipeableListContainer extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  list_style: {
+    alignSelf: 'stretch'
+  },
   header: {
     fontSize: 50,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   }
 });
