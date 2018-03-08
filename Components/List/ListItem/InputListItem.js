@@ -9,7 +9,7 @@ export default class InputListItem extends Component {
       show_text_input: false
     };
     this._showTextInput = this._showTextInput.bind(this);
-    //this._createTask = this._createTask.bind(this);
+    this._createTask = this._createTask.bind(this);
   }
 
   _showTextInput(){
@@ -19,17 +19,59 @@ export default class InputListItem extends Component {
     console.log(this.state.show_text_input);
   }
   /*
+  _createTask() {
+      console.log("POSTING");
+      _this = this;
+      fetch(
+        'http://192.168.1.101.xip.io:5000/create_task', {
+          method: 'POST',
+          body: JSON.stringify({
+            title: this.state.input,
+            deadline: "",
+            notifications: false,
+            repeat: false,
+            notes: ""
+          })
+        })
+        .then((response) => response)
+        .then((responseJson) => {
+          if (responseJson.ok) {
+            console.log("We in");
+            _this.setState({
+              input: "",
+              show_text_input: false
+            });
+          }
+          console.log(responseJson);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+}
+*/
+
   _createTask = async () => {
     try {
       console.log("POSTING");
       const response = await fetch(
         'http://192.168.1.101.xip.io:5000/create_task', {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({
-            title: this.state.input
+            title: this.state.input,
+            deadline: null,
+            notifications: false,
+            repeat: false,
+            notes: null
           }),
         });
-      const responseJson = await response.json();
+      const responseJson = await response;
+      if (responseJson.ok) {
+        console.log(responseJson);
+      }
       console.log(responseJson);
       this.setState({
         input: "",
@@ -39,7 +81,8 @@ export default class InputListItem extends Component {
       console.error(error);
     }
   }
-  */
+
+
 
   render() {
     return (
@@ -54,7 +97,7 @@ export default class InputListItem extends Component {
           placeholder="Add Task..."
           onChangeText={(input) => this.setState({input})}
           value ={this.state.input}
-          //onSubmitEditing={this._createTask}
+          onSubmitEditing={this._createTask}
           /> : null
         }
     </View>

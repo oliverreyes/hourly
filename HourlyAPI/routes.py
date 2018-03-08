@@ -1,6 +1,6 @@
-from HourlyAPI import app
+from HourlyAPI import app, db
 from HourlyAPI.models import Task, UserSchema, TaskSchema
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, abort
 
 task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)
@@ -18,15 +18,18 @@ def get_tasks():
 
 @app.route('/create_task', methods=['POST'])
 def create_task():
-    if not request.json or not 'title' in request.json:
+    print(request.get_json(force=True))
+    if not request.get_json(force=True) or not 'title' in request.get_json(force=True):
         abort(400)
-    title = request.json['title']
-    deadline = request.json['deadline']
-    notifications = request.json['notifications']
-    repeat = request.json['repeat']
-    notes = request.json['notes']
+    data = request.get_json(force=True)
 
-    new_task = Task(title, deadline, notifications, repeat, notes)
+    new_task = Task()
+    new_task.title = data.get('title')
+    new_task.deadline = data.get('deadline')
+    new_task.notifications = data.get('notifications')
+    new_task.repeat = data.get('repeat')
+    new_task.notes = data.get('notes')
+    print(new_task)
 
     db.session.add(new_task)
     db.session.commit()
