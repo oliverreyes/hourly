@@ -12,7 +12,7 @@ class TaskListView extends React.Component {
   async componentDidMount(){
     try {
       const response = await fetch(
-        'http://192.168.1.101.xip.io:5000/get_tasks'
+        'http://192.168.1.108.xip.io:5000/get_tasks'
       );
       const responseJson = await response.json();
       console.log(responseJson);
@@ -23,6 +23,7 @@ class TaskListView extends React.Component {
       console.error(error);
     }
   }
+
 
   render() {
     console.log(this.state.tasks);

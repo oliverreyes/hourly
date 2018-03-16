@@ -34,4 +34,6 @@ def create_task():
     db.session.add(new_task)
     db.session.commit()
 
-    return jsonify(new_task)
+    result = task_schema.dump(new_task)
+
+    return jsonify(result.data)

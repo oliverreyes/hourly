@@ -18,44 +18,12 @@ export default class InputListItem extends Component {
     }));
     console.log(this.state.show_text_input);
   }
-  /*
-  _createTask() {
-      console.log("POSTING");
-      _this = this;
-      fetch(
-        'http://192.168.1.101.xip.io:5000/create_task', {
-          method: 'POST',
-          body: JSON.stringify({
-            title: this.state.input,
-            deadline: "",
-            notifications: false,
-            repeat: false,
-            notes: ""
-          })
-        })
-        .then((response) => response)
-        .then((responseJson) => {
-          if (responseJson.ok) {
-            console.log("We in");
-            _this.setState({
-              input: "",
-              show_text_input: false
-            });
-          }
-          console.log(responseJson);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
-}
-*/
 
   _createTask = async () => {
     try {
       console.log("POSTING");
       const response = await fetch(
-        'http://192.168.1.101.xip.io:5000/create_task', {
+        'http://192.168.1.108.xip.io:5000/create_task', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -70,7 +38,7 @@ export default class InputListItem extends Component {
         });
       const responseJson = await response;
       if (responseJson.ok) {
-        console.log(responseJson);
+        console.log("OK");
       }
       console.log(responseJson);
       this.setState({
