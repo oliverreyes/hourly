@@ -11,11 +11,36 @@ export function requestTasks() {
 }
 
 /* When network request comes through */
-export function receiveTasks(task_list) {
-  return { type: RECEIVE_TASKS, task_list }
+export function receiveTasks(json) {
+  console.log(json);
+  return {
+    type: RECEIVE_TASKS,
+    task_list: json
+   }
 }
 
-/* POST a new task to DB */
+/* POST a new task to store */
 export function createTask(title) {
   return { type: CREATE_TASK, title }
+}
+
+/* thunk action creator */
+// Catch may cause trouble
+export function fetchTasks() {
+  // Dispatch method is passed as an arg to the function
+  // App state is updated to inform that API call is starting
+  console.log("WE IN HERE");
+  return async (dispatch) => {
+    try {
+      let response = await fetch(
+        'http://192.168.1.108.xip.io:5000/get_tasks'
+      );
+      let response_json = await response.json();
+      console.log(response_json);
+      let receive_json = await dispatch(receiveTasks(response_json));
+      console.log(receive_json);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }

@@ -1,11 +1,11 @@
 import { StackNavigator } from 'react-navigation';
-import TaskListView from '../TaskListView/TaskListView';
+import TaskListViewContainer from '../TaskListView/TaskListViewContainer';
 import TaskView from '../TaskListView/TaskView/TaskView';
 
 const TaskStack = StackNavigator(
   {
     Tasks: {
-      screen: TaskListView,
+      screen: TaskListViewContainer,
     },
     TaskView: {
       screen: TaskView,

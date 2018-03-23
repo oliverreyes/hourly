@@ -3,7 +3,7 @@ import {
   CREATE_TASK,
   REQUEST_TASKS,
   RECEIVE_TASKS
- } from '../actions/actions.js';
+ } from '../actions/actions';
 
 const tasks = (
   state = {
