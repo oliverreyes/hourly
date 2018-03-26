@@ -22,15 +22,12 @@ const tasks = (
       return { ...state,
         isFetching: false,
         isStale: false,
-        task_list: action.task_list
+        task_list: action.payload
        }
     case CREATE_TASK:
-      return [
-        ...state,
-        {
-          title: action.title
-        }
-      ]
+      return { ...state,
+        task_list: [...state.task_list, action.payload]
+      }
     default:
       return state
   }

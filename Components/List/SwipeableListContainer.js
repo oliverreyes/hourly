@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 import Separator from './Separator';
 import SwipeableListItem from './ListItem/SwipeableListItem';
-import InputListItem from './ListItem/InputListItem';
+import InputListItemContainer from './InputListItemContainer/InputListItemContainer';
 
 export default class SwipeableListContainer extends React.Component {
   constructor(props) {
@@ -32,7 +32,7 @@ export default class SwipeableListContainer extends React.Component {
             <SwipeableListItem item={item} navigation={this.props.navigation} />
           }
           keyExtractor={this._keyExtractor}
-          ListFooterComponent={<InputListItem />}
+          ListFooterComponent={<InputListItemContainer />}
 
         />
 

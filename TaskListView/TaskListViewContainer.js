@@ -41,7 +41,4 @@ const bindActionsToDispatch = dispatch =>
   }
 );
 
-export default TaskListViewContainer = connect(
-  mapStateToProps,
-  bindActionsToDispatch
-)(TaskListViewContainer);
+export default TaskListViewContainer = connect(mapStateToProps, bindActionsToDispatch)(TaskListViewContainer);
