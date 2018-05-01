@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import SwipeableListContainer from '../Components/List/SwipeableListContainer';
+import SwipeableListContainer from '../Components/List/SwipeableListContainer/SwipeableListContainer';
 import {
   fetchTasks,
   REQUEST_TASKS,

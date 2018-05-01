@@ -2,7 +2,8 @@ import { combineReducers } from 'redux';
 import {
   CREATE_TASK,
   REQUEST_TASKS,
-  RECEIVE_TASKS
+  RECEIVE_TASKS,
+  DELETE_TASK
  } from '../actions/actions';
 
 const tasks = (
@@ -26,7 +27,15 @@ const tasks = (
        }
     case CREATE_TASK:
       return { ...state,
-        task_list: [...state.task_list, action.payload]
+        task_list: [
+          ...state.task_list, action.payload
+        ]
+      }
+    case DELETE_TASK:
+      return { ...state,
+        task_list: [
+          ...state.task_list.filter(task => task.id !== action.payload)
+        ]
       }
     default:
       return state

@@ -1,14 +1,26 @@
 /* Action types */
 export const REQUEST_TASKS = 'REQUEST_TASKS'
+export const REQUEST_SINGLE_TASK = 'REQUEST_SINGLE_TASK'
 export const RECEIVE_TASKS = 'RECEIVE_TASKS'
 export const CREATE_TASK = 'CREATE_TASK'
+export const DELETE_TASK = 'DELETE_TASK'
+export const REFRESH_TASKS = 'REFRESH_TASKS'
 export const ERROR_FETCH = 'ERROR_FETCH'
 
 /* Action creators */
 /* *************** */
 /* Synchronous GET request to pull all tasks */
 export function requestTasks() {
-  return { type: REQUEST_TASKS }
+  return {
+    type: REQUEST_TASKS
+  }
+}
+
+export function requestSingleTask(task_id) {
+  return {
+    type: REQUEST_SINGLE_TASK,
+    task_id
+  }
 }
 
 /* When network request comes through */
@@ -28,6 +40,20 @@ export function createTask(new_task) {
   }
 }
 
+/* DELETE a task from store */
+export function deleteTask(task_id) {
+  return {
+    type: DELETE_TASK,
+    payload: task_id
+  }
+}
+/* Refresh task lists */
+export function refreshTasks() {
+  return {
+    type: REFRESH_TASKS
+  }
+}
+
 /* thunk action creator */
 // Catch may cause trouble
 export function fetchTasks() {
@@ -36,7 +62,7 @@ export function fetchTasks() {
   return async (dispatch) => {
     try {
       let response = await fetch(
-        'http://192.168.1.108.xip.io:5000/get_tasks'
+        'http://192.168.1.134.xip.io:5000/get_tasks'
       );
       let response_json = await response.json();
       console.log(response_json);
@@ -55,7 +81,7 @@ export function postTask(input) {
       console.log("POSTING");
       console.log(input);
       let response = await fetch(
-        'http://192.168.1.108.xip.io:5000/create_task', {
+        'http://192.168.1.134.xip.io:5000/create_task', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -71,6 +97,26 @@ export function postTask(input) {
       let response_json = await response.json();
       let post_task = await dispatch(createTask(response_json));
       console.log(post_task);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+
+export function removeTask(task_id) {
+  console.log(task_id);
+  return async (dispatch) => {
+    try {
+      console.log("REMOVING");
+      let response = await fetch(
+        'http://192.168.1.134.xip.io:5000/delete_task/'+task_id, {
+          method: 'DELETE'
+        });
+      let response_json = await response.json();
+      console.log(response_json);
+      let deleted_id = await dispatch(deleteTask(task_id));
+      console.log(deleted_id);
+
     } catch (error) {
       console.error(error);
     }

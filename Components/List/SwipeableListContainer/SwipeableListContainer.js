@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
-import Separator from './Separator';
-import SwipeableListItem from './ListItem/SwipeableListItem';
-import InputListItemContainer from './InputListItemContainer/InputListItemContainer';
+import Separator from '../Separator';
+import SwipeableListItemContainer from './SwipeableListItemContainer/SwipeableListItemContainer';
+import InputListItemContainer from '../InputListItemContainer/InputListItemContainer';
 
 export default class SwipeableListContainer extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ export default class SwipeableListContainer extends React.Component {
     this.enableScroll = this.enableScroll.bind(this);
   }
   // Need to turn key id into a String
-  _keyExtractor = (item, index) => item.id.toString();
+  _keyExtractor = (item) => item.id.toString();
 
   enableScroll(scroll_active) {
     this.setState({
@@ -29,7 +29,7 @@ export default class SwipeableListContainer extends React.Component {
           ListHeaderComponent={<Text style={styles.header}>Tasks</Text>}
           ItemSeparatorComponent={() => <Separator />}
           renderItem={({item}) =>
-            <SwipeableListItem item={item} navigation={this.props.navigation} />
+            <SwipeableListItemContainer item={item} navigation={this.props.navigation} />
           }
           keyExtractor={this._keyExtractor}
           ListFooterComponent={<InputListItemContainer />}

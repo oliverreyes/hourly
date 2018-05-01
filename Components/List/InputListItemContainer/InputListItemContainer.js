@@ -48,39 +48,7 @@ class InputListItemContainer extends Component {
       show_text_input: false
     });
   }
- /*
-  _createTask = async () => {
-    try {
-      console.log("POSTING");
-      const response = await fetch(
-        'http://192.168.1.108.xip.io:5000/create_task', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            title: this.state.input,
-            deadline: null,
-            notifications: false,
-            repeat: false,
-            notes: null
-          }),
-        });
-      const responseJson = await response.json();
-      if (responseJson.ok) {
-        console.log("OK");
-        console.log(responseJson.json());
-      }
-      console.log(responseJson);
-      this.setState({
-        input: "",
-        show_text_input: false
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-*/
+  
   render() {
     return <InputListItem {...this.props} _createTask={this._createTask} _showTextInput={() => this._showTextInput()} input={this.state.input} show_text_input={this.state.show_text_input} _changeInput={(input) => this._changeInput(input)}/>;
   }
