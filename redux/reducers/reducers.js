@@ -3,7 +3,8 @@ import {
   CREATE_TASK,
   REQUEST_TASKS,
   RECEIVE_TASKS,
-  DELETE_TASK
+  DELETE_TASK,
+  MODIFY_TASK
  } from '../actions/actions';
 
 const tasks = (
@@ -32,6 +33,12 @@ const tasks = (
         ]
       }
     case DELETE_TASK:
+      return { ...state,
+        task_list: [
+          ...state.task_list.filter(task => task.id !== action.payload)
+        ]
+      }
+    case MODIFY_TASK: //TODO
       return { ...state,
         task_list: [
           ...state.task_list.filter(task => task.id !== action.payload)

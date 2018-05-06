@@ -24,14 +24,14 @@ def create_task():
     print(request.get_json(force=True))
     if not request.get_json(force=True) or not 'title' in request.get_json(force=True):
         abort(400)
-    data = request.get_json(force=True)
+    payload = request.get_json(force=True)
 
     new_task = Task()
-    new_task.title = data.get('title')
-    new_task.deadline = data.get('deadline')
-    new_task.notifications = data.get('notifications')
-    new_task.repeat = data.get('repeat')
-    new_task.notes = data.get('notes')
+    new_task.title = payload.get('title')
+    new_task.deadline = payload.get('deadline')
+    new_task.notifications = payload.get('notifications')
+    new_task.repeat = payload.get('repeat')
+    new_task.notes = payload.get('notes')
     print(new_task)
 
     db.session.add(new_task)
@@ -54,5 +54,31 @@ def delete_task(task_id):
     db.session.commit()
 
     result = task_schema.dump(task_to_delete)
+
+    return jsonify(result)
+
+# API call to update existing task
+@app.route('/update_task/<int:task_id>', methods=['PUT'])
+def update_task(task_id):
+    print("Updating...")
+    print(task_id)
+
+    # Get payload
+    payload = request.get_json(force=True)
+
+    # Query specified task
+    task_to_update = Task.query.get(task_id)
+
+    # Replace content in DB with payload
+    task_to_update.title = payload.get('title')
+    task_to_update.deadline = payload.get('deadline')
+    task_to_update.notifications = payload.get('notifications')
+    task_to_update.repeat = payload.get('repeat')
+    task_to_update.notes = payload.get('notes')
+
+    print(task_to_update)
+    db.session.commit()
+
+    result = task_schema.dump(task_to_update)
 
     return jsonify(result)
