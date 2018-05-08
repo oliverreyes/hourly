@@ -38,11 +38,18 @@ const tasks = (
           ...state.task_list.filter(task => task.id !== action.payload)
         ]
       }
-    case MODIFY_TASK: //TODO
+    case MODIFY_TASK: 
       return { ...state,
-        task_list: [
-          ...state.task_list.filter(task => task.id !== action.payload)
-        ]
+        task_list: state.task_list.map(task => task.id === action.task_id ?
+          // Update matching task else return original task
+          { ...task,
+            title: action.payload.title,
+            deadline: action.payload.deadline,
+            notifications: action.payload.notifications,
+            repeat: action.payload.repeat,
+            notes: action.payload.notes
+          } : task
+        )
       }
     default:
       return state

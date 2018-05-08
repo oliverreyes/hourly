@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   input_container: {
     alignSelf: 'stretch',
     paddingVertical: 10,
-    height: 150
+    height: 250
   },
   input_button: {
 

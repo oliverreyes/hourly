@@ -11,17 +11,17 @@ class SwipeableListItemContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      task_id: ""
+      //task_id: ""
     };
     this._deleteTask = this._deleteTask.bind(this);
-    this._getSelectedId = this._getSelectedId.bind(this);
+    //this._getSelectedId = this._getSelectedId.bind(this);
   }
 
   _deleteTask(){
-    const task_id = this.state.task_id;
-    this.props.removeTask(task_id);
+    //const task_id = this.state.task_id;
+    this.props.removeTask(this.props.item.id);
   }
-
+/*
   _getSelectedId() {
     this.setState({
       task_id: this.props.item.id
@@ -29,6 +29,7 @@ class SwipeableListItemContainer extends Component {
     console.log(this.state.task_id);
     console.log(this.props.item.id);
   }
+  */
 
   render() {
     return <SwipeableListItem {...this.props} _deleteTask={this._deleteTask} item={this.props.item} navigation={this.props.navigation} _getSelectedId={this._getSelectedId} />;

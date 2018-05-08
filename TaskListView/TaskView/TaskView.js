@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 export default class TaskView extends React.Component {
   render() {
     //console.log(this.props.navigation.state.params.text);
-    const {params} = this.props.navigation.state;
+    //const {params} = this.props.navigation.state;
     return (
       <View style={styles.container}>
         <Text style={styles.header}>{params.text}</Text>
@@ -48,5 +48,3 @@ const styles = StyleSheet.create({
     marginBottom: 5
   }
 });
-
-//{this.props.navigation.state.params}

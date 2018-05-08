@@ -6,11 +6,12 @@ import {
 
 export default class SwipeableListItem extends React.Component {
   render() {
-    console.log(this.props.item);
+    //console.log(this.props.item);
     const {navigate} = this.props.navigation;
-    const {title, notifications, repeat} = this.props.item;
-    const deadline = (this.props.item.deadline ? this.props.item.deadline : "");
-    const notes = (this.props.item.notes ? this.props.item.notes : "");
+    const {id, title} = this.props.item;
+    //const {title, notifications, repeat} = this.props.item;
+    //const deadline = (this.props.item.deadline ? this.props.item.deadline : "");
+    //const notes = (this.props.item.notes ? this.props.item.notes : "");
     return (
       <View style={styles.list_box}>
         <TouchableHighlight onPress={this.props._getSelectedId}>
@@ -22,12 +23,13 @@ export default class SwipeableListItem extends React.Component {
               color="#841584"
             />
             <Button
-                onPress={() => navigate('TaskView', {
-                  text: title,
+                onPress={() => navigate('TaskViewContainer', {
+                  title: title,
                   deadline: deadline,
                   notifications: notifications,
                   repeat: repeat,
                   notes: notes,
+                  id: id
                 }
               )}
               title="Edit"

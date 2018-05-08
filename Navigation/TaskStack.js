@@ -1,6 +1,6 @@
 import { StackNavigator } from 'react-navigation';
 import TaskListViewContainer from '../TaskListView/TaskListViewContainer';
-import TaskView from '../TaskListView/TaskView/TaskView';
+import TaskViewContainer from '../TaskListView/TaskView/TaskViewContainer';
 
 const TaskStack = StackNavigator(
   {
@@ -8,7 +8,7 @@ const TaskStack = StackNavigator(
       screen: TaskListViewContainer,
     },
     TaskView: {
-      screen: TaskView,
+      screen: TaskViewContainer,
     },
   },
   {
