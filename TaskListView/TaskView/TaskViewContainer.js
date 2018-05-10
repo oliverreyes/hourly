@@ -22,14 +22,23 @@ class TaskViewContainer extends Component {
   }
 
   componentDidMount(){
-    //TODO on mount, find object in redux array using passed id and update component state with data
-    //this.props.navigation.state.params.id
+    const this_task = this.props.tasks.tasks.task_list.find(x => x.id === this.props.navigation.state.params.id)
+    console.log(this_task);
+
+    // On mount, find object in redux array using passed id and update component state with data
+    this.setState(
+      title: this_task.title,
+      dl: this_task.deadline,
+      notif: this_task.notifications,
+      repeat: this_task.repeat,
+      notes: this_task.notes
+    )
   }
 
   _showTextInput(){
     this.setState(prevState => ({
       show_text_input: !prevState.show_text_input
-    }));
+    }));d
   }
 
   _changeInput(new_input, type){
@@ -78,7 +87,7 @@ class TaskViewContainer extends Component {
   }
 
   render() {
-    return <TaskView {...this.props} _modifyTask={this._modifyTask} _showTextInput={() => this._showTextInput()} input={this.state.input} type={this.state.type} show_text_input={this.state.show_text_input} _changeInput={(input, type) => this._changeInput(input)}/>;
+    return <TaskView {...this.props} _modifyTask={this._modifyTask} _showTextInput={() => this._showTextInput()} input={this.state.input} type={this.state.type} show_text_input={this.state.show_text_input} _changeInput={(input, type) => this._changeInput(input)} />;
   }
 }
 

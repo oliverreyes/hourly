@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import {
   CREATE_TASK,
   REQUEST_TASKS,
+  REQUEST_SINGLE_TASK,
   RECEIVE_TASKS,
   DELETE_TASK,
   MODIFY_TASK
@@ -38,7 +39,7 @@ const tasks = (
           ...state.task_list.filter(task => task.id !== action.payload)
         ]
       }
-    case MODIFY_TASK: 
+    case MODIFY_TASK:
       return { ...state,
         task_list: state.task_list.map(task => task.id === action.task_id ?
           // Update matching task else return original task

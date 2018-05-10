@@ -23,12 +23,13 @@ export default class SwipeableListItem extends React.Component {
               color="#841584"
             />
             <Button
-                onPress={() => navigate('TaskViewContainer', {
-                  title: title,
+                onPress={() => navigate('TaskView', {
+                  /*title: title,
                   deadline: deadline,
                   notifications: notifications,
                   repeat: repeat,
                   notes: notes,
+                  */
                   id: id
                 }
               )}
