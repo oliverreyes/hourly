@@ -8,17 +8,22 @@ class TaskViewContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: "",
       title: "",
       dl: "",
       notif: "",
       repeat: "",
       notes: "",
       show_text_input: false,
-      type: ""
+      modified: false
     };
-    this._showTextInput = this._showTextInput.bind(this);
+    this._toggleTextInput = this._toggleTextInput.bind(this);
     this._modifyTask = this._modifyTask.bind(this);
-    this._changeInput = this._changeInput.bind(this);
+    this._changeTitle = this._changeTitle.bind(this);
+    this._changeDl = this._changeDl.bind(this);
+    this._changeNotif = this._changeNotif.bind(this);
+    this._changeRepeat = this._changeRepeat.bind(this);
+    this._changeNotes = this._changeNotes.bind(this);
   }
 
   componentDidMount(){
@@ -26,50 +31,55 @@ class TaskViewContainer extends Component {
     console.log(this_task);
 
     // On mount, find object in redux array using passed id and update component state with data
-    this.setState(
+    this.setState({
+      id: this_task.id,
       title: this_task.title,
       dl: this_task.deadline,
       notif: this_task.notifications,
       repeat: this_task.repeat,
       notes: this_task.notes
-    )
+    });
   }
 
-  _showTextInput(){
+  _toggleTextInput(){
     this.setState(prevState => ({
       show_text_input: !prevState.show_text_input
-    }));d
+    }));
   }
 
-  _changeInput(new_input, type){
-    if (type === title) {
+  _changeTitle(new_input){
       this.setState({
-        title: new_input
+        title: new_input,
+        modified: true
       });
-    }
-    else if (type === dl) {
+  }
+
+  _changeDl(new_input){
       this.setState({
-        dl: new_input
+        dl: new_input,
+        modified: true
       });
-    }
-    else if (type === repeat) {
+  }
+
+  _changeNotif(new_input){
       this.setState({
-        repeat: new_input
+        notif: new_input,
+        modified: true
       });
-    }
-    else if (type === notif) {
+  }
+
+  _changeRepeat(new_input){
       this.setState({
-        notif: new_input
+        repeat: new_input,
+        modified: true
       });
-    }
-    else if (type === notes) {
+  }
+
+  _changeNotes(new_input){
       this.setState({
-        notes: new_input
+        notes: new_input,
+        modified: true
       });
-    }
-    else {
-      return;
-    }
   }
 
   _modifyTask(){
@@ -81,13 +91,26 @@ class TaskViewContainer extends Component {
       this.state.repeat,
       this.state.notes);
     this.setState({
-      input: "",
-      show_text_input: false
+      modified: false
     });
   }
 
   render() {
-    return <TaskView {...this.props} _modifyTask={this._modifyTask} _showTextInput={() => this._showTextInput()} input={this.state.input} type={this.state.type} show_text_input={this.state.show_text_input} _changeInput={(input, type) => this._changeInput(input)} />;
+    return <TaskView {...this.props}
+    _modifyTask={this._modifyTask}
+    _toggleTextInput={() => this._toggleTextInput()}
+    show_text_input={this.state.show_text_input}
+    _changeTitle={(title) => this._changeTitle(title)}
+    _changeDl={(dl) => this._changeDl(dl)}
+    _changeNotif={(notif) => this._changeNotif(notif)}
+    _changeRepeat={(repeat) => this._changeRepeat(repeat)}
+    _changeNotes={(notes) => this._changeNotes(notes)}
+    title={this.state.title}
+    dl={this.state.dl}
+    repeat={this.state.repeat}
+    notif={this.state.notif}
+    notes={this.state.notes}
+    modified={this.state.modified} />;
   }
 }
 
@@ -98,8 +121,8 @@ const mapStateToProps = tasks => {
 const bindActionsToDispatch = dispatch =>
 (
   {
-    putTask : (id, title, dl, notif, repeat, notes) =>
-    dispatch(modifyTasks(id, title, dl, notif, repeat, notes))
+    putTask : (task_id, input_title, input_dl, input_notif, input_repeat, input_notes ) =>
+    dispatch(putTask(task_id, input_title, input_dl, input_notif, input_repeat, input_notes))
   }
 );
 
