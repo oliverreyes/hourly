@@ -155,8 +155,8 @@ export function putTask(task_id, input_title, input_dl, input_notif, input_repea
           }),
         });
       let response_json = await response.json();
-      console.log(response_json);
-      let modded_task = await dispatch(modifyTask(task_id, response_json));
+      console.log(response_json[0]);
+      let modded_task = await dispatch(modifyTask(task_id, response_json[0]));
       console.log(modded_task);
 
     } catch (error) {
