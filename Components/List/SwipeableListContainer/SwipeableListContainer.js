@@ -13,7 +13,8 @@ export default class SwipeableListContainer extends React.Component {
     this.enableScroll = this.enableScroll.bind(this);
   }
   // Need to turn key id into a String
-  _keyExtractor = (item) => item.id.toString();
+  //_keyExtractor = (item) => item.id.toString();
+  _keyExtractor = (item) => item.toString();
 
   enableScroll(scroll_active) {
     this.setState({

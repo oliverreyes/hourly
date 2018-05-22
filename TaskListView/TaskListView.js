@@ -17,11 +17,11 @@ class TaskListView extends Component {
   }
   */
   render() {
-    console.log(this.props.tasks.tasks);
+    console.log(this.props.tasks);
     return (
       <View style={styles.container}>
         <SwipeableListContainer
-          data={this.props.tasks.tasks.task_list}
+          data={this.props.tasks.task_list.allIds}
           navigation={this.props.navigation}
         />
       </View>
@@ -42,25 +42,3 @@ const styles = StyleSheet.create({
 });
 
 export default TaskListView;
-
-/*
-constructor(props){
-  super(props);
-  this.state = {tasks: []};
-}
-
-async componentDidMount(){
-  try {
-    const response = await fetch(
-      'http://192.168.1.108.xip.io:5000/get_tasks'
-    );
-    const responseJson = await response.json();
-    console.log(responseJson);
-    this.setState({
-      tasks: responseJson
-    });
-  } catch (error) {
-    console.error(error);
-  }
-}
-*/

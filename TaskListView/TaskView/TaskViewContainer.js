@@ -27,17 +27,18 @@ class TaskViewContainer extends Component {
   }
 
   componentDidMount(){
-    const this_task = this.props.tasks.tasks.task_list.find(x => x.id === this.props.navigation.state.params.id)
-    console.log(this_task);
+    //const this_task = this.props.tasks.tasks.task_list.find(x => x.id === this.props.navigation.state.params.id)
+    //console.log(this_task);
+    const {data} = this.props.navigation.state.params;
 
     // On mount, find object in redux array using passed id and update component state with data
     this.setState({
-      id: this_task.id,
-      title: this_task.title,
-      dl: this_task.deadline,
-      notif: this_task.notifications,
-      repeat: this_task.repeat,
-      notes: this_task.notes
+      id: data.id,
+      title: data.title,
+      dl: data.deadline,
+      notif: data.notifications,
+      repeat: data.repeat,
+      notes: data.notes
     });
   }
 

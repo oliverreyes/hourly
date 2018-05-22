@@ -10,35 +10,24 @@ import { removeTask } from '../../../../redux/actions/actions';
 class SwipeableListItemContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      //task_id: ""
-    };
+    this.state = {};
     this._deleteTask = this._deleteTask.bind(this);
-    //this._getSelectedId = this._getSelectedId.bind(this);
   }
 
   _deleteTask(){
-    //const task_id = this.state.task_id;
-    this.props.removeTask(this.props.item.id);
+    this.props.removeTask(this.props.item);
   }
-/*
-  _getSelectedId() {
-    this.setState({
-      task_id: this.props.item.id
-    });
-    console.log(this.state.task_id);
-    console.log(this.props.item.id);
-  }
-  */
+
 
   render() {
-    return <SwipeableListItem {...this.props} _deleteTask={this._deleteTask} item={this.props.item} navigation={this.props.navigation} _getSelectedId={this._getSelectedId} />;
+    console.log(this.props.item);
+    const task_data = this.props.tasks.task_list.byId[this.props.item];
+    return <SwipeableListItem {...this.props} _deleteTask={this._deleteTask} data={task_data} navigation={this.props.navigation}  />;
   }
 }
 
-const mapStateToProps = tasks => {
-  return { tasks }
-};
+const mapStateToProps = ({ tasks }) =>
+  ({ tasks });
 
 const bindActionsToDispatch = dispatch =>
 (

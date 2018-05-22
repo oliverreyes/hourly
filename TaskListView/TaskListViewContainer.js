@@ -30,9 +30,8 @@ class TaskListViewContainer extends Component {
   }
 }
 
-const mapStateToProps = tasks => {
-  return { tasks }
-};
+const mapStateToProps = ({ tasks }) =>
+  ({ tasks });
 
 const bindActionsToDispatch = dispatch =>
 (
