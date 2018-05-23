@@ -21,13 +21,13 @@ class SwipeableListItemContainer extends Component {
 
   render() {
     console.log(this.props.item);
-    const task_data = this.props.tasks.task_list.byId[this.props.item];
+    const task_data = this.props.task_data[this.props.item];
     return <SwipeableListItem {...this.props} _deleteTask={this._deleteTask} data={task_data} navigation={this.props.navigation}  />;
   }
 }
 
 const mapStateToProps = ({ tasks }) =>
-  ({ tasks });
+  ({ task_data: tasks.task_list.byId });
 
 const bindActionsToDispatch = dispatch =>
 (

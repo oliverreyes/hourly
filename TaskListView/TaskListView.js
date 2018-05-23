@@ -17,11 +17,11 @@ class TaskListView extends Component {
   }
   */
   render() {
-    console.log(this.props.tasks);
+    console.log(this.props.id_array);
     return (
       <View style={styles.container}>
         <SwipeableListContainer
-          data={this.props.tasks.task_list.allIds}
+          data={this.props.id_array}
           navigation={this.props.navigation}
         />
       </View>
