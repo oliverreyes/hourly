@@ -12,7 +12,10 @@ const tasks = (
   state = {
     isFetching: false,
     isStale: false,
-    task_list: []
+    task_list: {
+      byId: {},
+      allIds: []
+    }
   }, action
 ) => {
   switch (action.type) {
@@ -22,11 +25,20 @@ const tasks = (
         isStale: false
       }
     case RECEIVE_TASKS:
+      // Create object and array
+      const tasksById = {};
+      action.payload.map(task => {
+        tasksById[task.id] =  task
+      })
+      const ids_array = action.payload.map(task => task.id);
       return { ...state,
         isFetching: false,
         isStale: false,
-        task_list: action.payload
-       }
+        task_list: {
+          byId: tasksById,
+          allIds: ids_array
+        }
+      }
     case CREATE_TASK:
       return { ...state,
         task_list: [
@@ -47,7 +59,7 @@ const tasks = (
           deadline: action.payload.deadline,
           notifications: action.payload.notifications,
           repeat: action.payload.repeat,
-          notes: action.payload.notes}
+          notes: action.payload.notes }
           : task
         )
       }

@@ -8,7 +8,7 @@ export default class SwipeableListItem extends React.Component {
   render() {
     //console.log(this.props.item);
     const {navigate} = this.props.navigation;
-    const {id, title} = this.props.item;
+    const {id, title, notes, notifications, repeat, deadline} = this.props.data;
     //const {title, notifications, repeat} = this.props.item;
     //const deadline = (this.props.item.deadline ? this.props.item.deadline : "");
     //const notes = (this.props.item.notes ? this.props.item.notes : "");
@@ -29,8 +29,8 @@ export default class SwipeableListItem extends React.Component {
                   notifications: notifications,
                   repeat: repeat,
                   notes: notes,
-                  */
-                  id: id
+                  id: id */
+                  data: this.props.data
                 }
               )}
               title="Edit"

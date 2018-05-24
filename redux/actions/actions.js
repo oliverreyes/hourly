@@ -26,11 +26,11 @@ export function requestSingleTask(task_id) {
 }
 
 /* When network request comes through */
-export function receiveTasks(json) {
-  console.log(json);
+export function receiveTasks(tasks) {
+  console.log(tasks);
   return {
     type: RECEIVE_TASKS,
-    payload: json
+    payload: tasks
    }
 }
 
@@ -78,8 +78,9 @@ export function fetchTasks() {
       );
       let response_json = await response.json();
       console.log(response_json);
+      // Dispatch action
       let receive_json = await dispatch(receiveTasks(response_json));
-      console.log(receive_json);
+
     } catch (error) {
       console.error(error);
     }
