@@ -42,7 +42,8 @@ const tasks = (
     case CREATE_TASK:
       return { ...state,
         task_list: [
-          ...state.task_list, action.payload
+          ...state.task_list,
+          action.payload
         ]
       }
     case DELETE_TASK:

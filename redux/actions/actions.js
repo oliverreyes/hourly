@@ -8,7 +8,6 @@ export const MODIFY_TASK = 'MODIFY_TASK'
 export const REFRESH_TASKS = 'REFRESH_TASKS'
 export const ERROR_FETCH = 'ERROR_FETCH'
 
-
 /* Action creators */
 /* *************** */
 /* Synchronous GET request to pull all tasks */
