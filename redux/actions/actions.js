@@ -108,8 +108,8 @@ export function postTask(input) {
           }),
         });
       let response_json = await response.json();
+      console.log(response_json);
       let post_task = await dispatch(createTask(response_json));
-      console.log(post_task);
     } catch (error) {
       console.error(error);
     }

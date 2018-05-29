@@ -41,9 +41,17 @@ const tasks = (
       }
     case CREATE_TASK:
       return { ...state,
-        task_list: [
-          ...state.task_list, action.payload
-        ]
+        task_list: {
+          ...state.task_list,
+          byId: {
+            ...state.task_list.byId,
+            [action.payload.id] : action.payload
+          },
+          allIds: [
+            ...state.task_list.allIds,
+            action.payload.id
+          ]
+        }
       }
     case DELETE_TASK:
       return { ...state,
