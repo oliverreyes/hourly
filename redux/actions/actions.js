@@ -127,7 +127,6 @@ export function removeTask(task_id) {
       let response_json = await response.json();
       console.log(response_json);
       let deleted_id = await dispatch(deleteTask(task_id));
-      console.log(deleted_id);
 
     } catch (error) {
       console.error(error);

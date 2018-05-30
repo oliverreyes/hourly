@@ -41,16 +41,30 @@ const tasks = (
       }
     case CREATE_TASK:
       return { ...state,
-        task_list: [
+        task_list: {
           ...state.task_list,
-          action.payload
-        ]
+          byId: {
+            ...state.task_list.byId,
+            [action.payload.id] : action.payload
+          },
+          allIds: [
+            ...state.task_list.allIds,
+            action.payload.id
+          ]
+        }
       }
     case DELETE_TASK:
+      const id_to_delete = action.payload.toString();
+      const old_state = state.task_list.byId;
+      const { [id_to_delete] : value, ...new_byId } = old_state;
+      console.log(new_byId);
       return { ...state,
-        task_list: [
-          ...state.task_list.filter(task => task.id !== action.payload)
-        ]
+        task_list: {
+          byId: new_byId,
+          allIds: [
+            ...state.task_list.allIds.filter(id => id !== action.payload)
+          ]
+        }
       }
     // Update matching task else return original task
     case MODIFY_TASK:
