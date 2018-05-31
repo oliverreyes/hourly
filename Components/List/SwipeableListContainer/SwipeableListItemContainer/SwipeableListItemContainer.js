@@ -18,10 +18,12 @@ class SwipeableListItemContainer extends Component {
     this.props.removeTask(this.props.item);
   }
 
-
   render() {
     console.log(this.props.item);
     const task_data = this.props.task_data[this.props.item];
+    console.log(this.props.task_data);
+    console.log(this.props.task_data[this.props.item]);
+    console.log(task_data);
     return <SwipeableListItem {...this.props} _deleteTask={this._deleteTask} data={task_data} navigation={this.props.navigation}  />;
   }
 }

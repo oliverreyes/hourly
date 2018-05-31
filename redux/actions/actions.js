@@ -8,7 +8,6 @@ export const MODIFY_TASK = 'MODIFY_TASK'
 export const REFRESH_TASKS = 'REFRESH_TASKS'
 export const ERROR_FETCH = 'ERROR_FETCH'
 
-
 /* Action creators */
 /* *************** */
 /* Synchronous GET request to pull all tasks */
@@ -128,7 +127,6 @@ export function removeTask(task_id) {
       let response_json = await response.json();
       console.log(response_json);
       let deleted_id = await dispatch(deleteTask(task_id));
-      console.log(deleted_id);
 
     } catch (error) {
       console.error(error);

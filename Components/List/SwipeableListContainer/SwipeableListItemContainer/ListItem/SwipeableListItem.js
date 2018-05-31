@@ -6,12 +6,8 @@ import {
 
 export default class SwipeableListItem extends React.Component {
   render() {
-    //console.log(this.props.item);
     const {navigate} = this.props.navigation;
     const {id, title, notes, notifications, repeat, deadline} = this.props.data;
-    //const {title, notifications, repeat} = this.props.item;
-    //const deadline = (this.props.item.deadline ? this.props.item.deadline : "");
-    //const notes = (this.props.item.notes ? this.props.item.notes : "");
     return (
       <View style={styles.list_box}>
         <TouchableHighlight onPress={this.props._getSelectedId}>

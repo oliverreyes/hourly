@@ -30,6 +30,7 @@ class TaskListViewContainer extends Component {
   }
 }
 
+
 const mapStateToProps = ({ tasks }) =>
   ({ id_array: tasks.task_list.allIds });
 
