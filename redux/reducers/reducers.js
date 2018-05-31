@@ -57,7 +57,6 @@ const tasks = (
       const id_to_delete = action.payload.toString();
       const old_state = state.task_list.byId;
       const { [id_to_delete] : value, ...new_byId } = old_state;
-      console.log(new_byId);
       return { ...state,
         task_list: {
           byId: new_byId,
@@ -66,17 +65,15 @@ const tasks = (
           ]
         }
       }
-    // Update matching task else return original task
+    // Update corresponding task
     case MODIFY_TASK:
       return { ...state,
-        task_list: state.task_list.map(task => task.id === action.task_id ? { ...task,
-          title: action.payload.title,
-          deadline: action.payload.deadline,
-          notifications: action.payload.notifications,
-          repeat: action.payload.repeat,
-          notes: action.payload.notes }
-          : task
-        )
+        task_list: { ...state.task_list,
+          byId: {
+            ...state.task_list.byId,
+            [action.task_id] : action.payload
+          }
+        }
       }
     default:
       return state
