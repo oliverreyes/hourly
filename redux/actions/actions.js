@@ -5,6 +5,7 @@ export const RECEIVE_TASKS = 'RECEIVE_TASKS'
 export const CREATE_TASK = 'CREATE_TASK'
 export const DELETE_TASK = 'DELETE_TASK'
 export const MODIFY_TASK = 'MODIFY_TASK'
+export const REORDER_TASK = 'REORDER_TASK'
 export const REFRESH_TASKS = 'REFRESH_TASKS'
 export const ERROR_FETCH = 'ERROR_FETCH'
 
@@ -55,6 +56,14 @@ export function modifyTask(task_id, content) {
     type: MODIFY_TASK,
     payload: content,
     task_id
+  }
+}
+
+/* Reorder a task  */
+export function reorderTask(task_id, curr_pos, new_pos) {
+  return {
+    type: REORDER_TASK,
+    payload: { task_id, curr_pos, new_pos }
   }
 }
 

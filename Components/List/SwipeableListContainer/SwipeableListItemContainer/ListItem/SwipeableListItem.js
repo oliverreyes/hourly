@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, Button, Animated } from 'react-native';
 import {
   deleteTasks
 } from '../../../../../redux/actions/actions';
@@ -10,8 +10,8 @@ export default class SwipeableListItem extends React.Component {
     const {id, title, notes, notifications, repeat, deadline} = this.props.data;
     return (
       <View style={styles.list_box}>
-        <TouchableHighlight onPress={this.props._getSelectedId}>
-          <View>
+        <TouchableHighlight onLongPress={this.props._onLongPress}>
+          <Animated.View {...this.props.panHandlers}>
             <Text style={styles.list_text}>{title}</Text>
             <Button
               onPress={this.props._deleteTask}
@@ -32,7 +32,7 @@ export default class SwipeableListItem extends React.Component {
               title="Edit"
               color="#841584"
             />
-          </View>
+          </Animated.View>
         </TouchableHighlight>
       </View>
     );

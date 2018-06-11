@@ -5,7 +5,8 @@ import {
   REQUEST_SINGLE_TASK,
   RECEIVE_TASKS,
   DELETE_TASK,
-  MODIFY_TASK
+  MODIFY_TASK,
+  REORDER_TASK
  } from '../actions/actions';
 
 const tasks = (
@@ -73,6 +74,21 @@ const tasks = (
             ...state.task_list.byId,
             [action.task_id] : action.payload
           }
+        }
+      }
+    case REORDER_TASK:
+      const mod_allIds = [
+        ...state.task_list.allIds.slice(0,action.payload.curr_pos),
+        ...state.task_list.allIds.slice(action.payload.curr_pos)
+      ];
+      const front = [...mod_allIds.slice(0,action.payload.new_pos)];
+      const back = [...mod_allIds.slice(action.payload.new_pos+1)];
+      console.log(mod_allIds);
+      console.log(front);
+      console.log(back);
+      return { ...state,
+        task_list: { ...state.task_list,
+          //allIds: [...front, action.payload.task_id, ...back];
         }
       }
     default:
