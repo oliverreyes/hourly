@@ -13,7 +13,6 @@ class SwipeableListItemContainer extends Component {
     super(props);
     this.state = {
       panResponder: this._longPressPanResponder(),
-      scroll: true,
       pan: new Animated.ValueXY()
     };
     this._deleteTask = this._deleteTask.bind(this);
@@ -21,7 +20,8 @@ class SwipeableListItemContainer extends Component {
     this._longPressPanResponder = this._longPressPanResponder.bind(this);
   }
   /**
-   * Handle response for long press on task list item. Sets panResponder in state.
+   * Handle response for long press on task list item
+   . Sets panResponder in state.
    */
   _onLongPress(){
     console.log(this.state.panResponder);
@@ -42,44 +42,57 @@ class SwipeableListItemContainer extends Component {
    */
   _longPressPanResponder = () => PanResponder.create({
     //onMoveShouldSetPanResponder: (e, gestureState) => true, may only need Capture since we don't want children to get responder
+    //onStartShouldSetResponderCapture: (e, gestureState) => true,
     onStartShouldSetPanResponderCapture: (e, gestureState) => true,
     onPanResponderTerminationRequest: (e, gestureState) => false,
     onPanResponderGrant: (e, gestureState) => {
       console.log("Granted...");
+      this.state.pan.setOffset({
+        //x: this.state.pan.x._value,
+        y: this.state.pan.y._value
+      });
+      this.props._toggleScroll();
 
 
         // The gesture has started. Show visual feedback so the user knows
         // what is happening!
 
         // gestureState.d{x,y} will be set to zero now
-      },
-      onPanResponderMove: (e, gestureState) => {
-        Animated.event([null, // ignore the native event
-          // extract dx and dy from gestureState
-          // like 'pan.x = gestureState.dx, pan.y = gestureState.dy'
-          {dx: this.state.pan.x, dy: this.state.pan.y}
-        ])
-        console.log(this.state.pan);
-        // The most recent move distance is gestureState.move{X,Y}
+    },
+    onPanResponderMove: (e, gestureState) => {
+      // The most recent move distance is gestureState.move{X,Y}
+      // The accumulated gesture distance since becoming responder is
+      // gestureState.d{x,y}
+      console.log(gestureState.dx, gestureState.dy);
+      const y_movement = gestureState.dy;
+      const is_moving_down = (Math.sign(y_movement) > 0) ? true : false;
+      console.log(is_moving_down);
+      const spaces = mod(y_movement,150);
+      console.log(spaces);
 
-        // The accumulated gesture distance since becoming responder is
-        // gestureState.d{x,y}
-      },
-      onPanResponderRelease: (e, gestureState) => {
-        // The user has released all touches while this view is the
-        // responder. This typically means a gesture has succeeded
-        console.log("Finished");
+      return Animated.event([null, {
+          //dx: this.state.pan.x,
+          dy: this.state.pan.y
+        }
+      ])(e, gestureState)
+    },
+    onPanResponderRelease: (e, {vx, vy}) => {
+      // The user has released all touches while this view is the
+      // responder. This typically means a gesture has succeeded
+      this.state.pan.flattenOffset();
+      this.props._toggleScroll();
 
-      },
-      onPanResponderTerminate: (e, gestureState) => {
-        // Another component has become the responder, so this gesture
-        // should be cancelled
-      },
-      onShouldBlockNativeResponder: (e, gestureState) => {
-        // Returns whether this component should block native components from becoming the JS
-        // responder. Returns true by default. Is currently only supported on android.
-        return true;
-      },
+      console.log("Finished");
+    },
+    onPanResponderTerminate: (e, gestureState) => {
+      // Another component has become the responder, so this gesture
+      // should be cancelled
+    },
+    onShouldBlockNativeResponder: (e, gestureState) => {
+      // Returns whether this component should block native components from becoming the JS
+      // responder. Returns true by default. Is currently only supported on android.
+      return true;
+    },
   });
 
   /**
@@ -95,8 +108,13 @@ class SwipeableListItemContainer extends Component {
     console.log(this.props.task_data);
     console.log(this.props.task_data[this.props.item]);
     console.log(task_data);
-    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={task_data} navigation={this.props.navigation} _onLongPress={this._onLongPress}/>;
+    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={task_data} navigation={this.props.navigation} _onLongPress={this._onLongPress} pan={this.state.pan} />;
   }
+}
+
+/* Modulo helper */
+function mod(n, m) {
+  return ((n % m) + m) % m;
 }
 
 const mapStateToProps = ({ tasks }) =>

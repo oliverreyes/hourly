@@ -9,9 +9,9 @@ export default class SwipeableListItem extends React.Component {
     const {navigate} = this.props.navigation;
     const {id, title, notes, notifications, repeat, deadline} = this.props.data;
     return (
-      <View style={styles.list_box}>
+      <Animated.View style={[this.props.pan.getLayout(), styles.list_box]} {...this.props.panHandlers}>
         <TouchableHighlight onLongPress={this.props._onLongPress}>
-          <Animated.View {...this.props.panHandlers}>
+          <View >
             <Text style={styles.list_text}>{title}</Text>
             <Button
               onPress={this.props._deleteTask}
@@ -32,9 +32,9 @@ export default class SwipeableListItem extends React.Component {
               title="Edit"
               color="#841584"
             />
-          </Animated.View>
+          </View>
         </TouchableHighlight>
-      </View>
+      </Animated.View>
     );
   }
 }
@@ -43,7 +43,9 @@ const styles = StyleSheet.create({
   list_box: {
     alignSelf: 'stretch',
     paddingVertical: 10,
-    flex: 1
+    flex: 1,
+    backgroundColor: 'white',
+    height: 150
   },
   list_text: {
     fontSize: 28,
