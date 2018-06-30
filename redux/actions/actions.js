@@ -82,7 +82,7 @@ export function fetchTasks() {
   return async (dispatch) => {
     try {
       let response = await fetch(
-        'http://192.168.1.134.xip.io:5000/get_tasks'
+        'http://192.168.1.148.xip.io:5000/get_tasks'
       );
       let response_json = await response.json();
       console.log(response_json);
@@ -102,7 +102,7 @@ export function postTask(input) {
       console.log("POSTING");
       console.log(input);
       let response = await fetch(
-        'http://192.168.1.134.xip.io:5000/create_task', {
+        'http://192.168.1.148.xip.io:5000/create_task', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -130,7 +130,7 @@ export function removeTask(task_id) {
     try {
       console.log("REMOVING");
       let response = await fetch(
-        'http://192.168.1.134.xip.io:5000/delete_task/'+task_id, {
+        'http://192.168.1.148.xip.io:5000/delete_task/'+task_id, {
           method: 'DELETE'
         });
       let response_json = await response.json();
@@ -149,7 +149,37 @@ export function putTask(task_id, input_title, input_dl, input_notif, input_repea
     try {
       console.log("UPDATING");
       let response = await fetch(
-        'http://192.168.1.134.xip.io:5000/update_task/'+task_id, {
+        'http://192.168.1.148.xip.io:5000/update_task/'+task_id, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title: input_title,
+            deadline: input_dl,
+            notifications: input_notif,
+            repeat: input_repeat,
+            notes: input_notes
+          }),
+        });
+      let response_json = await response.json();
+      console.log(response_json[0]);
+      let modded_task = await dispatch(modifyTask(task_id, response_json[0]));
+      console.log(modded_task);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+
+export function shuffleTask(task_id, curr_pos, new_pos) {
+  console.log(task_id);
+  return async (dispatch) => {
+    try {
+      console.log("Shuffling");
+      let response = await fetch(
+        'http://192.168.1.148.xip.io:5000/update_task/'+task_id, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'

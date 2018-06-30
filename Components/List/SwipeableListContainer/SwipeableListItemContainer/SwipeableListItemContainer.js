@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { PanResponder, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import SwipeableListItem from './ListItem/SwipeableListItem';
-import { removeTask } from '../../../../redux/actions/actions';
+import { removeTask, reorderTask } from '../../../../redux/actions/actions';
 
 
 /*
@@ -13,11 +13,28 @@ class SwipeableListItemContainer extends Component {
     super(props);
     this.state = {
       panResponder: this._longPressPanResponder(),
-      pan: new Animated.ValueXY()
+      pan: new Animated.ValueXY(),
+      z_index: 0,
+      spaces: 0,
+      task_data: null,
+      task_id: null,
+      task_index: null
     };
     this._deleteTask = this._deleteTask.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
     this._longPressPanResponder = this._longPressPanResponder.bind(this);
+  }
+
+  componentDidMount(){
+    const this_data = this.props.task_data[this.props.item];
+    const this_index = this.props.task_array.indexOf(this.props.item);
+    if (this.props.task_data && this.props.task_array.length > 0){
+      this.setState({
+        task_data: this_data,
+        task_id: this.props.item,
+        task_index: this_index
+      });
+    }
   }
   /**
    * Handle response for long press on task list item
@@ -51,6 +68,13 @@ class SwipeableListItemContainer extends Component {
         //x: this.state.pan.x._value,
         y: this.state.pan.y._value
       });
+      this.setState({
+        z_index: 100
+      });
+      console.log("Zindex is " + this.state.z_index);
+      console.log("Current index is " + this.state.task_index);
+      console.log("ID: " + this.state.task_id);
+
       this.props._toggleScroll();
 
 
@@ -63,12 +87,26 @@ class SwipeableListItemContainer extends Component {
       // The most recent move distance is gestureState.move{X,Y}
       // The accumulated gesture distance since becoming responder is
       // gestureState.d{x,y}
-      console.log(gestureState.dx, gestureState.dy);
+      //console.log(gestureState.dx, gestureState.dy);
       const y_movement = gestureState.dy;
       const is_moving_down = (Math.sign(y_movement) > 0) ? true : false;
-      console.log(is_moving_down);
-      const spaces = mod(y_movement,150);
-      console.log(spaces);
+      //console.log(is_moving_down);
+      //const spaces = mod(y_movement,150);
+      const spaces = Math.floor(y_movement/150);
+      const overflow = Math.abs(y_movement) % 150;
+      let moved_spaces = 0;
+      if (is_moving_down) {
+        moved_spaces = (overflow > 74) ? spaces+1 : spaces;
+      }
+      else {
+        moved_spaces = (overflow > 74) ? spaces-1 : spaces;
+      }
+      //console.log("Spaces = " + spaces);
+      //console.log("Overflow = " + overflow);
+      this.setState({
+        spaces: moved_spaces
+      });
+      //console.log("Moved spaces = " + this.state.spaces);
 
       return Animated.event([null, {
           //dx: this.state.pan.x,
@@ -80,7 +118,17 @@ class SwipeableListItemContainer extends Component {
       // The user has released all touches while this view is the
       // responder. This typically means a gesture has succeeded
       this.state.pan.flattenOffset();
+      this.props.reorderTask(this.state.task_id, this.state.task_index, this.state.task_index+this.state.spaces);
+      const new_y = (this.state.task_index+this.state.spaces) * 150;
+      console.log( "New Y = " + new_y);
+      this.setState({
+        z_index: 0
+      });
       this.props._toggleScroll();
+      Animated.spring(
+        this.state.pan,
+        {toValue: {x:0, y:new_y}}
+      ).start();
 
       console.log("Finished");
     },
@@ -104,26 +152,24 @@ class SwipeableListItemContainer extends Component {
 
   render() {
     console.log(this.props.item);
-    const task_data = this.props.task_data[this.props.item];
-    console.log(this.props.task_data);
-    console.log(this.props.task_data[this.props.item]);
-    console.log(task_data);
-    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={task_data} navigation={this.props.navigation} _onLongPress={this._onLongPress} pan={this.state.pan} />;
+    console.log(this.state.task_data);
+    //console.log(this.state.task_data[this.props.item]);
+    //console.log(task_data);
+    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={this.state.task_data} navigation={this.props.navigation} _onLongPress={this._onLongPress} pan={this.state.pan} z_index={this.state.z_index}/>;
   }
 }
 
-/* Modulo helper */
-function mod(n, m) {
-  return ((n % m) + m) % m;
-}
-
 const mapStateToProps = ({ tasks }) =>
-  ({ task_data: tasks.task_list.byId });
+  ({
+    task_data: tasks.task_list.byId,
+    task_array: tasks.task_list.allIds
+  });
 
 const bindActionsToDispatch = dispatch =>
 (
   {
-    removeTask : (task_id) => dispatch(removeTask(task_id))
+    removeTask : (task_id) => dispatch(removeTask(task_id)),
+    reorderTask : (task_id, curr_pos, new_pos) => dispatch(reorderTask(task_id, curr_pos, new_pos))
   }
 );
 

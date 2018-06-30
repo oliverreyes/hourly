@@ -77,18 +77,56 @@ const tasks = (
         }
       }
     case REORDER_TASK:
-      const mod_allIds = [
-        ...state.task_list.allIds.slice(0,action.payload.curr_pos),
-        ...state.task_list.allIds.slice(action.payload.curr_pos)
-      ];
-      const front = [...mod_allIds.slice(0,action.payload.new_pos)];
-      const back = [...mod_allIds.slice(action.payload.new_pos+1)];
-      console.log(mod_allIds);
-      console.log(front);
-      console.log(back);
+      let mod_allIds, front, back = [];
+      const allIds_length = state.task_list.allIds.length;
+      /* Check if index is first or last in array */
+      if (action.payload.curr_pos !== 0 && action.payload.curr_pos !== allIds_length){
+        console.log("Current idx not 0 or last: " + action.payload.curr_pos);
+        mod_allIds = [
+          ...state.task_list.allIds.slice(0, action.payload.curr_pos),
+          ...state.task_list.allIds.slice(action.payload.curr_pos+1)
+        ];
+      }
+      else if (action.payload.curr_pos === 0){
+        console.log("Current idx is 0");
+        mod_allIds = [...state.task_list.allIds.slice(1)]
+      }
+      else if (action.payload.curr_pos === allIds_length){
+        console.log("Current idx is last");
+        mod_allIds = [...state.task_list.allIds.slice(0, action.payload.curr_pos)]
+      }
+      else {
+        console.log("CURR IDX: " + action.payload.curr_pos);
+      }
+      if (action.payload.new_pos !== 0 && action.payload.new_pos !== allIds_length){
+        console.log("New idx not 0 or last: " + action.payload.new_pos);
+        front = [...mod_allIds.slice(0,action.payload.new_pos)];
+        front = [...front, action.payload.task_id];
+        back = [...mod_allIds.slice(action.payload.new_pos)];
+      }
+      else if (action.payload.new_pos === 0){
+        console.log("New idx is 0");
+        front = [action.payload.task_id];
+        back = [mod_allIds];
+      }
+      else if (action.payload.new_pos === allIds_length){
+        console.log("New idx is last");
+        front = [mod_allIds];
+        back = [action.payload.task_id];
+      }
+      else {
+        console.log("NEW IDX: " + action.payload.new_pos);
+      }
+
+      //const front_plus = [...front, action.payload.task_id];
+      console.log("THIS ID: " + action.payload.task_id);
+      console.log("ALL: " + mod_allIds);
+      console.log("FRONT: " + front);
+      console.log("BACK: " + back);
+      //console.log("FRONT+1: " + front_plus);
       return { ...state,
         task_list: { ...state.task_list,
-          //allIds: [...front, action.payload.task_id, ...back];
+          allIds: [...front, ...back]
         }
       }
     default:
