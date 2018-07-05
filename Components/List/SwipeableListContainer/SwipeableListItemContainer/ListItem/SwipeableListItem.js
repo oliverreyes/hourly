@@ -10,8 +10,8 @@ export default class SwipeableListItem extends React.Component {
     //const {id, title, notes, notifications, repeat, deadline} = this.props.data;
     const {title} = (this.props.data != null) ? this.props.data : '';
     return (
-      <Animated.View style={[this.props.pan.getLayout(), styles.list_box, {zIndex: this.props.z_index}]} {...this.props.panHandlers}>
-        <TouchableHighlight onLongPress={this.props._onLongPress}>
+      <Animated.View style={[this.props.pan.getLayout(), styles.list_box/*, {zIndex: this.props.z_index}*/]} {...this.props.panHandlers}>
+        <TouchableHighlight onLongPress={this.props._onLongPress} activeOpacity={0.3} >
           <View >
             <Text style={styles.list_text}>{title}</Text>
             <Button

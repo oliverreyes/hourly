@@ -12,7 +12,7 @@ class SwipeableListItemContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      panResponder: this._longPressPanResponder(),
+      panResponder: "",
       pan: new Animated.ValueXY(),
       z_index: 0,
       spaces: 0,
@@ -26,6 +26,7 @@ class SwipeableListItemContainer extends Component {
   }
 
   componentDidMount(){
+    //console.log("KEY: " + this.props.key);
     const this_data = this.props.task_data[this.props.item];
     const this_index = this.props.task_array.indexOf(this.props.item);
     if (this.props.task_data && this.props.task_array.length > 0){
@@ -42,6 +43,7 @@ class SwipeableListItemContainer extends Component {
    */
   _onLongPress(){
     console.log(this.state.panResponder);
+    console.log("LONGPRESS");
     this.setState({
       panResponder: this._longPressPanResponder()
     });
@@ -88,6 +90,18 @@ class SwipeableListItemContainer extends Component {
       // The accumulated gesture distance since becoming responder is
       // gestureState.d{x,y}
       //console.log(gestureState.dx, gestureState.dy);
+
+
+      return Animated.event([null, {
+          //dx: this.state.pan.x,
+          dy: this.state.pan.y
+        }
+      ])(e, gestureState)
+    },
+    onPanResponderRelease: (e, gestureState) => {
+      // The user has released all touches while this view is the
+      // responder. This typically means a gesture has succeeded
+      //this.state.pan.flattenOffset();
       const y_movement = gestureState.dy;
       const is_moving_down = (Math.sign(y_movement) > 0) ? true : false;
       //console.log(is_moving_down);
@@ -101,34 +115,40 @@ class SwipeableListItemContainer extends Component {
       else {
         moved_spaces = (overflow > 74) ? spaces-1 : spaces;
       }
+      let new_index = this.state.task_index + moved_spaces;
+      /* Set edge cases */
+      if (new_index < 0) {
+        new_index = 0;
+      }
+      else if (new_index > this.props.task_array.length) {
+        new_index = this.props.task_array.length;
+      }
+      console.log("NEW INDEX: " + new_index);
       //console.log("Spaces = " + spaces);
       //console.log("Overflow = " + overflow);
-      this.setState({
-        spaces: moved_spaces
-      });
       //console.log("Moved spaces = " + this.state.spaces);
 
-      return Animated.event([null, {
-          //dx: this.state.pan.x,
-          dy: this.state.pan.y
-        }
-      ])(e, gestureState)
-    },
-    onPanResponderRelease: (e, {vx, vy}) => {
-      // The user has released all touches while this view is the
-      // responder. This typically means a gesture has succeeded
-      this.state.pan.flattenOffset();
-      this.props.reorderTask(this.state.task_id, this.state.task_index, this.state.task_index+this.state.spaces);
-      const new_y = (this.state.task_index+this.state.spaces) * 150;
+
+      const new_y = new_index * 150;
       console.log( "New Y = " + new_y);
+      /*
       this.setState({
         z_index: 0
       });
+      */
+      if (this.state.task_index !== new_index){
+        this.props.reorderTask(this.state.task_id, this.state.task_index, new_index);
+      }
+      else {
+        Animated.spring(
+          this.state.pan,
+          {toValue: {x:0, y:0}}
+        ).start();
+      }
+      this.setState({
+        panResponder: ""
+      });
       this.props._toggleScroll();
-      Animated.spring(
-        this.state.pan,
-        {toValue: {x:0, y:new_y}}
-      ).start();
 
       console.log("Finished");
     },
@@ -151,11 +171,11 @@ class SwipeableListItemContainer extends Component {
   }
 
   render() {
-    console.log(this.props.item);
-    console.log(this.state.task_data);
+    //console.log(this.props.item);
+    //console.log(this.state.task_data);
     //console.log(this.state.task_data[this.props.item]);
     //console.log(task_data);
-    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={this.state.task_data} navigation={this.props.navigation} _onLongPress={this._onLongPress} pan={this.state.pan} z_index={this.state.z_index}/>;
+    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={this.state.task_data} navigation={this.props.navigation} _onLongPress={this._onLongPress} pan={this.state.pan} /*z_index={this.state.z_index}*//>;
   }
 }
 

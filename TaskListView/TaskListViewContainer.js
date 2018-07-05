@@ -22,7 +22,7 @@ class TaskListViewContainer extends Component {
   }
   */
   fetchData() {
-    console.log(this.props);
+    console.log("FETCH: " + this.props);
     this.props.fetchTasks();
   }
   render() {

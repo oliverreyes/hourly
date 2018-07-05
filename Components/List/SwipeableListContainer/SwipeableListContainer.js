@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, FlatList, LayoutAnimation } from 'react-native';
 import Separator from '../Separator';
 import SwipeableListItemContainer from './SwipeableListItemContainer/SwipeableListItemContainer';
 import InputListItemContainer from '../InputListItemContainer/InputListItemContainer';
@@ -12,11 +12,17 @@ export default class SwipeableListContainer extends React.Component {
     };
     this._toggleScroll = this._toggleScroll.bind(this);
   }
+
+  componentDidUpdate(){
+    console.log("ANIMATING");
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  }
   // Need to turn key id into a String
   //_keyExtractor = (item) => item.id.toString();
   _keyExtractor = (item) => item.toString();
 
   _toggleScroll(){
+    console.log("SCROLL ENABLED");
     this.setState(prevState => ({
       scroll_active: !prevState.scroll_active
     }));
