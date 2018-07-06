@@ -8,17 +8,27 @@ export default class SwipeableListContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      scroll_active: true
+      scroll_active: true,
+      reorder_id: null,
+      reorder_toggle: false
     };
     this._toggleScroll = this._toggleScroll.bind(this);
+    this._updateReorderId = this._updateReorderId.bind(this);
+  }
+
+  _updateReorderId(id){
+    this.setState(prevState => ({
+      reorder_id: id,
+      reorder_toggle: !prevState.reorder_toggle
+    }));
   }
 
   componentDidUpdate(){
     console.log("ANIMATING");
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   }
+
   // Need to turn key id into a String
-  //_keyExtractor = (item) => item.id.toString();
   _keyExtractor = (item) => item.toString();
 
   _toggleScroll(){
@@ -28,16 +38,16 @@ export default class SwipeableListContainer extends React.Component {
     }));
   }
   render() {
-    console.log(this.props.data);
+    console.log(this.props.id_array);
     return (
       <FlatList
           style={styles.list_style}
-          data={this.props.data}
+          data={this.props.id_array}
           ListHeaderComponent={<Text style={styles.header}>Tasks</Text>}
           ItemSeparatorComponent={() => <Separator />}
           scrollEnabled={this.state.scroll_active}
           renderItem={({item}) =>
-            <SwipeableListItemContainer item={item} navigation={this.props.navigation} _toggleScroll={() => this._toggleScroll()}/>
+            <SwipeableListItemContainer item={item} navigation={this.props.navigation} _toggleScroll={() => this._toggleScroll()} reorder_id={this.state.reorder_id} reorder_toggle={this.state.reorder_toggle} _updateReorderId={(reorder_id) => this._updateReorderId(reorder_id)} />
           }
           keyExtractor={this._keyExtractor}
           ListFooterComponent={<InputListItemContainer />}

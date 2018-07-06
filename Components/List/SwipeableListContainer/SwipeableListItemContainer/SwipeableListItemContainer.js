@@ -18,35 +18,54 @@ class SwipeableListItemContainer extends Component {
       spaces: 0,
       task_data: null,
       task_id: null,
-      task_index: null
+      //task_index: null
     };
     this._deleteTask = this._deleteTask.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
     this._longPressPanResponder = this._longPressPanResponder.bind(this);
+    this._onReorderPress = this._onReorderPress.bind(this);
   }
 
   componentDidMount(){
     //console.log("KEY: " + this.props.key);
+
     const this_data = this.props.task_data[this.props.item];
-    const this_index = this.props.task_array.indexOf(this.props.item);
+    //const this_index = this.props.task_array.indexOf(this.props.item);
     if (this.props.task_data && this.props.task_array.length > 0){
       this.setState({
         task_data: this_data,
-        task_id: this.props.item,
-        task_index: this_index
+        task_id: this.props.item
+        //task_index: this_index
       });
     }
   }
+
   /**
    * Handle response for long press on task list item
    . Sets panResponder in state.
    */
   _onLongPress(){
     console.log(this.state.panResponder);
-    console.log("LONGPRESS");
+    console.log("LONGPRESS:" + this.state.task_id);
+    /* Sets reorder ID and toggles reorder */
+    this.props._updateReorderId(this.state.task_id);
+    /*
     this.setState({
       panResponder: this._longPressPanResponder()
     });
+    */
+  }
+  _onReorderPress(){
+    const this_index = this.props.task_array.indexOf(this.props.item);
+    if (this.props.reorder_toggle & (this.props.reorder_id !== null)){
+      console.log("NEW INDEX: " + this.state.this_index);
+      console.log("REORDER ID: " + this.props.reorder_id);
+      if (this.state.task_id !== this.props.reorder_id){
+        this.props.reorderTask(this.props.reorder_id, this_index);
+      }
+      /* Set to null and toggle reorder back */
+      this.props._updateReorderId(null);
+    }
   }
   /**
    * Handle response for swiping task list item. Sets panResponder in state.
@@ -175,7 +194,7 @@ class SwipeableListItemContainer extends Component {
     //console.log(this.state.task_data);
     //console.log(this.state.task_data[this.props.item]);
     //console.log(task_data);
-    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={this.state.task_data} navigation={this.props.navigation} _onLongPress={this._onLongPress} pan={this.state.pan} /*z_index={this.state.z_index}*//>;
+    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={this.state.task_data} navigation={this.props.navigation} _onLongPress={this._onLongPress} pan={this.state.pan} /*z_index={this.state.z_index}*/  _onReorderPress={this._onReorderPress}/>;
   }
 }
 

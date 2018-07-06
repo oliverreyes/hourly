@@ -21,7 +21,7 @@ class TaskListView extends Component {
     return (
       <View style={styles.container}>
         <SwipeableListContainer
-          data={this.props.id_array}
+          id_array={this.props.id_array}
           navigation={this.props.navigation}
         />
       </View>

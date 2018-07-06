@@ -82,6 +82,7 @@ const tasks = (
       let mod_allIds = copy_allIds.filter(id => id !== action.payload.task_id);
       let new_allIds = [];
       /* Check if index is first or last in array */
+
       if (action.payload.new_pos !== 0 && action.payload.new_pos !== allIds_length){
         console.log("New idx not 0 or last: " + action.payload.new_pos);
         new_allIds = [...mod_allIds.slice(0, action.payload.new_pos), action.payload.task_id, ...mod_allIds.slice(action.payload.new_pos)];
@@ -99,6 +100,7 @@ const tasks = (
       }
       console.log("THIS ID: " + action.payload.task_id);
       console.log("ALL: " + new_allIds);
+    
       return { ...state,
         task_list: { ...state.task_list,
           allIds: new_allIds

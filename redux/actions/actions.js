@@ -60,10 +60,10 @@ export function modifyTask(task_id, content) {
 }
 
 /* Reorder a task  */
-export function reorderTask(task_id, curr_pos, new_pos) {
+export function reorderTask(task_id, new_pos) {
   return {
     type: REORDER_TASK,
-    payload: { task_id, curr_pos, new_pos }
+    payload: { task_id, new_pos }
   }
 }
 
