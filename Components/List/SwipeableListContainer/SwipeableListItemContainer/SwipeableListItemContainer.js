@@ -17,8 +17,7 @@ class SwipeableListItemContainer extends Component {
       z_index: 0,
       spaces: 0,
       task_data: null,
-      task_id: null,
-      //task_index: null
+      task_id: null
     };
     this._deleteTask = this._deleteTask.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
@@ -27,44 +26,54 @@ class SwipeableListItemContainer extends Component {
   }
 
   componentDidMount(){
-    //console.log("KEY: " + this.props.key);
-
     const this_data = this.props.task_data[this.props.item];
-    //const this_index = this.props.task_array.indexOf(this.props.item);
     if (this.props.task_data && this.props.task_array.length > 0){
       this.setState({
         task_data: this_data,
         task_id: this.props.item
-        //task_index: this_index
       });
     }
   }
 
   /**
    * Handle response for long press on task list item
-   . Sets panResponder in state.
+   * Sets reorder ID and toggles reorder
    */
   _onLongPress(){
-    console.log(this.state.panResponder);
-    console.log("LONGPRESS:" + this.state.task_id);
-    /* Sets reorder ID and toggles reorder */
-    this.props._updateReorderId(this.state.task_id);
+    //console.log(this.state.panResponder);
+    const this_index = this.props.task_array.indexOf(this.props.item);
+    console.log("LONGPRESS ID: " + this.state.task_id);
+    console.log("LONGPRESS INDEX: " + this_index);
+    this.props._updateReorderIdx(this_index);
+    this.props._toggleReorder();
     /*
     this.setState({
       panResponder: this._longPressPanResponder()
     });
     */
   }
+  /**
+   * Get and set new index in state. Call action to reorder tasks in store
+   */
   _onReorderPress(){
     const this_index = this.props.task_array.indexOf(this.props.item);
-    if (this.props.reorder_toggle & (this.props.reorder_id !== null)){
-      console.log("NEW INDEX: " + this.state.this_index);
-      console.log("REORDER ID: " + this.props.reorder_id);
-      if (this.state.task_id !== this.props.reorder_id){
-        this.props.reorderTask(this.props.reorder_id, this_index);
+    if (this.props.reorder_toggle){
+      console.log("NEW INDEX: " + this_index);
+      console.log("OLD INDEX: " + this.props.old_index);
+      if (this.props.old_index !== this_index && (this.props.old_index+1 !== this_index)){
+
+        /* Set to null and toggle reorder back */
+        //this.props._updateReorderIdx(null);
+        //this.props._toggleReorder();
+        this.props.reorderTask(this.props.old_index, this_index);
       }
-      /* Set to null and toggle reorder back */
-      this.props._updateReorderId(null);
+      this.props._toggleReorder();
+      /*
+      else {
+        this.props._updateReorderIdx(null);
+        this.props._toggleReorder();
+      }
+      */
     }
   }
   /**

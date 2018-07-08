@@ -9,18 +9,13 @@ export default class SwipeableListContainer extends React.Component {
     super(props);
     this.state = {
       scroll_active: true,
-      reorder_id: null,
-      reorder_toggle: false
+      //reorder_id: null,
+      reorder_toggle: false,
+      old_index: null
     };
     this._toggleScroll = this._toggleScroll.bind(this);
-    this._updateReorderId = this._updateReorderId.bind(this);
-  }
-
-  _updateReorderId(id){
-    this.setState(prevState => ({
-      reorder_id: id,
-      reorder_toggle: !prevState.reorder_toggle
-    }));
+    this._updateReorderIdx = this._updateReorderIdx.bind(this);
+    this.toggleReorder = this._toggleReorder.bind(this);
   }
 
   componentDidUpdate(){
@@ -28,14 +23,29 @@ export default class SwipeableListContainer extends React.Component {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   }
 
-  // Need to turn key id into a String
+  /**
+   * Turn key (item) into a string
+   */
   _keyExtractor = (item) => item.toString();
 
   _toggleScroll(){
-    console.log("SCROLL ENABLED");
     this.setState(prevState => ({
       scroll_active: !prevState.scroll_active
     }));
+    console.log("SCROLL: " + this.state.scroll_active);
+  }
+  
+  _updateReorderIdx(index){
+    this.setState({
+      old_index: index
+    })
+  }
+
+  _toggleReorder(){
+    this.setState(prevState => ({
+      reorder_toggle: !prevState.reorder_toggle
+    }));
+    console.log("REORDER: " + this.state.reorder_toggle);
   }
   render() {
     console.log(this.props.id_array);
@@ -47,7 +57,7 @@ export default class SwipeableListContainer extends React.Component {
           ItemSeparatorComponent={() => <Separator />}
           scrollEnabled={this.state.scroll_active}
           renderItem={({item}) =>
-            <SwipeableListItemContainer item={item} navigation={this.props.navigation} _toggleScroll={() => this._toggleScroll()} reorder_id={this.state.reorder_id} reorder_toggle={this.state.reorder_toggle} _updateReorderId={(reorder_id) => this._updateReorderId(reorder_id)} />
+            <SwipeableListItemContainer item={item} navigation={this.props.navigation} _toggleScroll={() => this._toggleScroll()} reorder_toggle={this.state.reorder_toggle} old_index={this.state.old_index} _updateReorderIdx={(old_index) => this._updateReorderIdx(old_index)} _toggleReorder={() => this._toggleReorder()} />
           }
           keyExtractor={this._keyExtractor}
           ListFooterComponent={<InputListItemContainer />}

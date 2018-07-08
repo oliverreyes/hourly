@@ -77,30 +77,29 @@ const tasks = (
         }
       }
     case REORDER_TASK:
-      const allIds_length = state.task_list.allIds.length;
-      let copy_allIds = state.task_list.allIds.slice();
-      let mod_allIds = copy_allIds.filter(id => id !== action.payload.task_id);
+      const copy_allIds = state.task_list.allIds.slice();
+      const reorder_id = copy_allIds[action.payload.old_pos];
+      let mod_allIds = copy_allIds.filter((id) => id !== reorder_id);
       let new_allIds = [];
       /* Check if index is first or last in array */
-
-      if (action.payload.new_pos !== 0 && action.payload.new_pos !== allIds_length){
-        console.log("New idx not 0 or last: " + action.payload.new_pos);
-        new_allIds = [...mod_allIds.slice(0, action.payload.new_pos), action.payload.task_id, ...mod_allIds.slice(action.payload.new_pos)];
-      }
-      else if (action.payload.new_pos === 0){
+      if (action.payload.new_pos === 0){
         console.log("New idx is 0");
-        new_allIds = [action.payload.task_id, ...mod_allIds];
+        new_allIds = [reorder_id, ...mod_allIds];
       }
-      else if (action.payload.new_pos === allIds_length){
-        console.log("New idx is last");
-        new_allIds = [...mod_allIds, action.payload.task_id];
+      else if (action.payload.old_pos > action.payload.new_pos){
+        console.log("OLD > NEW");
+        new_allIds = [...mod_allIds.slice(0, action.payload.new_pos), reorder_id, ...mod_allIds.slice(action.payload.new_pos)];
+      }
+      else if (action.payload.old_pos < action.payload.new_pos){
+        console.log("OLD < NEW");
+        new_allIds = [...mod_allIds.slice(0, action.payload.new_pos-1), reorder_id, ...mod_allIds.slice(action.payload.new_pos-1)];
       }
       else {
         console.log("ERROR NEW IDX: " + action.payload.new_pos);
       }
-      console.log("THIS ID: " + action.payload.task_id);
+      console.log("THIS ID: " + reorder_id);
       console.log("ALL: " + new_allIds);
-    
+
       return { ...state,
         task_list: { ...state.task_list,
           allIds: new_allIds
