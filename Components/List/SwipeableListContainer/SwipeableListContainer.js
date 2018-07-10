@@ -34,7 +34,7 @@ export default class SwipeableListContainer extends React.Component {
     }));
     console.log("SCROLL: " + this.state.scroll_active);
   }
-  
+
   _updateReorderIdx(index){
     this.setState({
       old_index: index
@@ -57,7 +57,15 @@ export default class SwipeableListContainer extends React.Component {
           ItemSeparatorComponent={() => <Separator />}
           scrollEnabled={this.state.scroll_active}
           renderItem={({item}) =>
-            <SwipeableListItemContainer item={item} navigation={this.props.navigation} _toggleScroll={() => this._toggleScroll()} reorder_toggle={this.state.reorder_toggle} old_index={this.state.old_index} _updateReorderIdx={(old_index) => this._updateReorderIdx(old_index)} _toggleReorder={() => this._toggleReorder()} />
+            <SwipeableListItemContainer
+              item={item}
+              navigation={this.props.navigation}
+              _toggleScroll={() => this._toggleScroll()}
+              reorder_toggle={this.state.reorder_toggle}
+              old_index={this.state.old_index}
+              _updateReorderIdx={(old_index) => this._updateReorderIdx(old_index)}
+              _toggleReorder={() => this._toggleReorder()}
+            />
           }
           keyExtractor={this._keyExtractor}
           ListFooterComponent={<InputListItemContainer />}

@@ -111,8 +111,8 @@ export function postTask(input) {
             title: input,
             deadline: null,
             notifications: false,
-            repeat: false,
-            notes: null
+            exp: 5,
+            status: "todo"
           }),
         });
       let response_json = await response.json();
@@ -143,7 +143,7 @@ export function removeTask(task_id) {
   }
 }
 
-export function putTask(task_id, input_title, input_dl, input_notif, input_repeat, input_notes ) {
+export function putTask(task_id, input_title, input_dl, input_notif, input_exp, input_status, input_order ) {
   console.log(task_id);
   return async (dispatch) => {
     try {
@@ -158,8 +158,8 @@ export function putTask(task_id, input_title, input_dl, input_notif, input_repea
             title: input_title,
             deadline: input_dl,
             notifications: input_notif,
-            repeat: input_repeat,
-            notes: input_notes
+            exp: input_exp,
+            status: input_status
           }),
         });
       let response_json = await response.json();
@@ -173,29 +173,27 @@ export function putTask(task_id, input_title, input_dl, input_notif, input_repea
   }
 }
 
-export function shuffleTask(task_id, curr_pos, new_pos) {
-  console.log(task_id);
+export function shuffleTask(id_array, old_pos, new_pos) {
+  /* TODO Still old array */
+  let copy_array = id_array.slice();
+  console.log(copy_array);
+  copy_array.splice(new_pos, 0, copy_array.splice(old_pos, 1)[0]);
+  console.log(copy_array);
   return async (dispatch) => {
     try {
       console.log("Shuffling");
       let response = await fetch(
-        'http://192.168.1.114.xip.io:5000/update_task/'+task_id, {
+        'http://192.168.1.114.xip.io:5000/reorder_tasks', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            title: input_title,
-            deadline: input_dl,
-            notifications: input_notif,
-            repeat: input_repeat,
-            notes: input_notes
-          }),
+          body: JSON.stringify(copy_array),
         });
       let response_json = await response.json();
-      console.log(response_json[0]);
-      let modded_task = await dispatch(modifyTask(task_id, response_json[0]));
-      console.log(modded_task);
+      console.log(response_json);
+      let reorder_task = await dispatch(reorderTask(old_pos, new_pos));
+      console.log(reorder_task);
 
     } catch (error) {
       console.error(error);

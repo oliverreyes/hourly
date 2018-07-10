@@ -42,20 +42,21 @@ class InputListItemContainer extends Component {
 
   _createTask(){
     const complete_input = this.state.input;
-    this.props.postTask(complete_input);
+    const order = this.props.task_array.length;
+    this.props.postTask(complete_input, order);
     this.setState({
       input: "",
       show_text_input: false
     });
   }
-  
+
   render() {
     return <InputListItem {...this.props} _createTask={this._createTask} _showTextInput={() => this._showTextInput()} input={this.state.input} show_text_input={this.state.show_text_input} _changeInput={(input) => this._changeInput(input)}/>;
   }
 }
 
-const mapStateToProps = tasks => {
-  return { tasks }
+const mapStateToProps = ({ tasks }) => {
+  return { task_array: tasks.task_list.allIds }
 };
 
 const bindActionsToDispatch = dispatch =>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { PanResponder, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import SwipeableListItem from './ListItem/SwipeableListItem';
-import { removeTask, reorderTask } from '../../../../redux/actions/actions';
+import { removeTask, reorderTask, shuffleTask } from '../../../../redux/actions/actions';
 
 
 /*
@@ -16,7 +16,7 @@ class SwipeableListItemContainer extends Component {
       pan: new Animated.ValueXY(),
       z_index: 0,
       spaces: 0,
-      task_data: null,
+      //task_data: null,
       task_id: null
     };
     this._deleteTask = this._deleteTask.bind(this);
@@ -26,10 +26,11 @@ class SwipeableListItemContainer extends Component {
   }
 
   componentDidMount(){
-    const this_data = this.props.task_data[this.props.item];
+    //const this_data = this.props.task_data[this.props.item];
+    console.log(this.props.task_data[this.props.item]);
     if (this.props.task_data && this.props.task_array.length > 0){
       this.setState({
-        task_data: this_data,
+        //task_data: this_data,
         task_id: this.props.item
       });
     }
@@ -65,7 +66,7 @@ class SwipeableListItemContainer extends Component {
         /* Set to null and toggle reorder back */
         //this.props._updateReorderIdx(null);
         //this.props._toggleReorder();
-        this.props.reorderTask(this.props.old_index, this_index);
+        this.props.shuffleTask(this.props.task_array, this.props.old_index, this_index);
       }
       this.props._toggleReorder();
       /*
@@ -201,9 +202,8 @@ class SwipeableListItemContainer extends Component {
   render() {
     //console.log(this.props.item);
     //console.log(this.state.task_data);
-    //console.log(this.state.task_data[this.props.item]);
     //console.log(task_data);
-    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={this.state.task_data} navigation={this.props.navigation} _onLongPress={this._onLongPress} pan={this.state.pan} /*z_index={this.state.z_index}*/  _onReorderPress={this._onReorderPress}/>;
+    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={this.props.task_data[this.props.item]} navigation={this.props.navigation} _onLongPress={this._onLongPress} pan={this.state.pan} /*z_index={this.state.z_index}*/  _onReorderPress={this._onReorderPress}/>;
   }
 }
 
@@ -217,7 +217,7 @@ const bindActionsToDispatch = dispatch =>
 (
   {
     removeTask : (task_id) => dispatch(removeTask(task_id)),
-    reorderTask : (task_id, curr_pos, new_pos) => dispatch(reorderTask(task_id, curr_pos, new_pos))
+    shuffleTask : (id_array, old_pos, new_pos) => dispatch(shuffleTask(id_array, old_pos, new_pos))
   }
 );
 

@@ -53,9 +53,9 @@ export default class TaskView extends React.Component {
             { this.props.show_text_input ? <TextInput
               style={styles.input_text}
               //onChangeText={this.props._changeRepeat}
-              value={this.props.repeat ? "On" : "Off"}
+              value={this.props.exp}
               onSubmitEditing={this.props._toggleTextInput}
-              /> : <Text style={styles.text}>Repeat - {this.props.repeat ? "On" : "Off"}</Text>
+              /> : <Text style={styles.text}>Priority - {this.props.exp}</Text>
             }
           </TouchableOpacity>
         </View>
@@ -65,10 +65,10 @@ export default class TaskView extends React.Component {
             onPress={this.props._toggleTextInput}>
             { this.props.show_text_input ? <TextInput
               style={styles.input_text}
-              onChangeText={this.props._changeNotes}
-              value={this.props.notes}
+              onChangeText={this.props._changeStatus}
+              value={this.props.status}
               onSubmitEditing={this.props._toggleTextInput}
-              /> : <Text style={styles.text}>Notes - {this.props.notes}</Text>
+              /> : <Text style={styles.text}>Status- {this.props.status}</Text>
             }
           </TouchableOpacity>
         </View>

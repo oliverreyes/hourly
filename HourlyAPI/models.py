@@ -15,8 +15,9 @@ class Task(db.Model):
     title = db.Column(db.String(64), index=True)
     deadline = db.Column(db.DateTime, index=True)
     notifications = db.Column(db.Boolean)
-    repeat = db.Column(db.Boolean)
-    notes = db.Column(db.Text)
+    exp = db.Column(db.Integer, index=True)
+    status = db.Column(db.String(16), index=True)
+    order = db.Column(db.Integer, index=True)
 
     def __repr__(self):
         return '<Task {}'.format(self.title)
