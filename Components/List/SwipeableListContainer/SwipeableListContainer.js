@@ -4,12 +4,21 @@ import Separator from '../Separator';
 import SwipeableListItemContainer from './SwipeableListItemContainer/SwipeableListItemContainer';
 import InputListItemContainer from '../InputListItemContainer/InputListItemContainer';
 
+/**
+  * Container component handles list animations, scroll, and reorder functionality.
+  * Displays list of tasks.
+  * @prop {array} id_array array of ids for ordering
+  * @prop {obj} navigation navigation props
+  * @state {boolean} scroll_active flag to toggle scroll
+  * @state {boolean} reorder_toggle flag to toggle reorder state
+  * @state {integer} old_index holds value of previous index for reorder
+  * @return FlatList, SwipeableListItemContainer components
+  */
 export default class SwipeableListContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       scroll_active: true,
-      //reorder_id: null,
       reorder_toggle: false,
       old_index: null
     };
@@ -18,16 +27,16 @@ export default class SwipeableListContainer extends React.Component {
     this.toggleReorder = this._toggleReorder.bind(this);
   }
 
+  /* Animate list movement when state changes */
   componentDidUpdate(){
     console.log("ANIMATING");
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   }
 
-  /**
-   * Turn key (item) into a string
-   */
+  /* Turn key (item) into a string */
   _keyExtractor = (item) => item.toString();
 
+  /* Allow or disable list scrolling */
   _toggleScroll(){
     this.setState(prevState => ({
       scroll_active: !prevState.scroll_active
@@ -35,12 +44,13 @@ export default class SwipeableListContainer extends React.Component {
     console.log("SCROLL: " + this.state.scroll_active);
   }
 
+  /* Store old index */
   _updateReorderIdx(index){
     this.setState({
       old_index: index
     })
   }
-
+  /* Set reorder flag */
   _toggleReorder(){
     this.setState(prevState => ({
       reorder_toggle: !prevState.reorder_toggle

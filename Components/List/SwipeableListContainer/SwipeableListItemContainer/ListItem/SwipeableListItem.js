@@ -4,14 +4,18 @@ import {
   deleteTasks
 } from '../../../../../redux/actions/actions';
 
+/**
+  * Presentational component
+  * @prop {obj} navigation navigation props
+  * @return
+  */
 export default class SwipeableListItem extends React.Component {
   render() {
     const {navigate} = this.props.navigation;
-    //const {id, title, notes, notifications, repeat, deadline} = this.props.data;
     const {title} = (this.props.data != null) ? this.props.data : '';
     console.log(this.props.data);
     return (
-      <Animated.View style={[this.props.pan.getLayout(), styles.list_box/*, {zIndex: this.props.z_index}*/]} {...this.props.panHandlers}>
+      <Animated.View style={[this.props.pan.getLayout(), styles.list_box]} {...this.props.panHandlers}>
         <TouchableHighlight onLongPress={this.props._onLongPress} activeOpacity={0.3} onPress={this.props._onReorderPress} >
           <View >
             <Text style={styles.list_text}>{title}</Text>
@@ -22,12 +26,6 @@ export default class SwipeableListItem extends React.Component {
             />
             <Button
                 onPress={() => navigate('TaskView', {
-                  /*title: title,
-                  deadline: deadline,
-                  notifications: notifications,
-                  repeat: repeat,
-                  notes: notes,
-                  id: id */
                   data: this.props.data
                 }
               )}

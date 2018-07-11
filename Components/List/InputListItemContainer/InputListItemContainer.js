@@ -9,12 +9,11 @@ import {
 } from '../../../redux/actions/actions';
 
 
-/* Need to set this async POST function in the actions module +
- * Call that function via dispatch from here +
- * Use the state as params for text +
- * Post it to the store, then post it to DB +
- * Update the list to reflect new task +
-*/
+/**
+  * Container component
+  * @prop {}
+  * @return
+  */
 class InputListItemContainer extends Component {
   constructor(props) {
     super(props);

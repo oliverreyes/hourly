@@ -5,6 +5,9 @@ import TaskListView from './TaskListView/TaskListView';
 import GoalListView from './GoalListView/GoalListView';
 import HomeView from './HomeView/HomeView';
 
+/**
+  * StackNavigator component delegates between views
+  */
 const Navigator = StackNavigator(
   {
     Home: {

@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { withNavigation } from 'react-navigation';
 
+/**
+  * Presentational component
+  * @prop {obj} navigation navigation props
+  * @return View, Button components
+  */
 class Footer extends React.Component {
   render() {
     const {navigate} = this.props.navigation;

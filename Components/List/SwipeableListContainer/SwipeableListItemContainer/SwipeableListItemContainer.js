@@ -5,57 +5,46 @@ import SwipeableListItem from './ListItem/SwipeableListItem';
 import { removeTask, reorderTask, shuffleTask } from '../../../../redux/actions/actions';
 
 
-/*
- * Need to set this async DELETE function in the actions module
- */
+/**
+  * Container component handles long press, swipe, and task delete functionality
+  * @prop {integer} item task id
+  * @prop {integer} old_index stored old index for reordering
+  * @prop {obj} navigation navigation props
+  * @props {function} _toggleScroll() sets scroll flag
+  * @props {function} _updateReorderIdx() sets reorder's old index
+  * @props {function} _toggleReorder() sets reorder flag
+  * @props {boolean} reorder_toggle reorder flag
+  * @props {array} task_array id array from redux store
+  * @props {obj} task_data object containing task data from redux store
+  * @props {function} removeTask calls redux action to delete task from store and DB
+  * @props {function} shuffleTask calls redux action to reorder tasks in store and DB
+  * @state {obj} panResponder PanResponder object
+  * @state {obj} pan Animated x and y value
+  * @return SwipeableListItem component
+  */
 class SwipeableListItemContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       panResponder: "",
       pan: new Animated.ValueXY(),
-      z_index: 0,
-      spaces: 0,
-      //task_data: null,
-      task_id: null
     };
     this._deleteTask = this._deleteTask.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
-    this._longPressPanResponder = this._longPressPanResponder.bind(this);
+    //this._swipePanResponder = this._swipePanResponder.bind(this);
     this._onReorderPress = this._onReorderPress.bind(this);
   }
 
-  componentDidMount(){
-    //const this_data = this.props.task_data[this.props.item];
-    console.log(this.props.task_data[this.props.item]);
-    if (this.props.task_data && this.props.task_array.length > 0){
-      this.setState({
-        //task_data: this_data,
-        task_id: this.props.item
-      });
-    }
-  }
-
-  /**
-   * Handle response for long press on task list item
-   * Sets reorder ID and toggles reorder
-   */
+  /* Handle response for long press on task list item
+   * Sets reorder ID and toggles reorder */
   _onLongPress(){
-    //console.log(this.state.panResponder);
     const this_index = this.props.task_array.indexOf(this.props.item);
-    console.log("LONGPRESS ID: " + this.state.task_id);
+    console.log("LONGPRESS ID: " + this.props.item);
     console.log("LONGPRESS INDEX: " + this_index);
     this.props._updateReorderIdx(this_index);
     this.props._toggleReorder();
-    /*
-    this.setState({
-      panResponder: this._longPressPanResponder()
-    });
-    */
   }
-  /**
-   * Get and set new index in state. Call action to reorder tasks in store
-   */
+  /* Get and set new index in state. Call action to reorder tasks in store */
   _onReorderPress(){
     const this_index = this.props.task_array.indexOf(this.props.item);
     if (this.props.reorder_toggle){
@@ -82,30 +71,21 @@ class SwipeableListItemContainer extends Component {
    */
   _onSwipe(){
     this.setState({
-      panResponder: this._longPressPanResponder()
+      panResponder: this._swipePanResponder()
     });
   }
   /**
-   * Create PanResponder for dragging and dropping list item.
+   * Create PanResponder for swiping
    */
-  _longPressPanResponder = () => PanResponder.create({
-    //onMoveShouldSetPanResponder: (e, gestureState) => true, may only need Capture since we don't want children to get responder
-    //onStartShouldSetResponderCapture: (e, gestureState) => true,
+   /*
+  _swipePanResponder = () => PanResponder.create({
     onStartShouldSetPanResponderCapture: (e, gestureState) => true,
     onPanResponderTerminationRequest: (e, gestureState) => false,
     onPanResponderGrant: (e, gestureState) => {
       console.log("Granted...");
       this.state.pan.setOffset({
-        //x: this.state.pan.x._value,
-        y: this.state.pan.y._value
+        x: this.state.pan.x._value
       });
-      this.setState({
-        z_index: 100
-      });
-      console.log("Zindex is " + this.state.z_index);
-      console.log("Current index is " + this.state.task_index);
-      console.log("ID: " + this.state.task_id);
-
       this.props._toggleScroll();
 
 
@@ -123,7 +103,7 @@ class SwipeableListItemContainer extends Component {
 
       return Animated.event([null, {
           //dx: this.state.pan.x,
-          dy: this.state.pan.y
+          dy: this.state.pan.x
         }
       ])(e, gestureState)
     },
@@ -131,42 +111,8 @@ class SwipeableListItemContainer extends Component {
       // The user has released all touches while this view is the
       // responder. This typically means a gesture has succeeded
       //this.state.pan.flattenOffset();
-      const y_movement = gestureState.dy;
-      const is_moving_down = (Math.sign(y_movement) > 0) ? true : false;
-      //console.log(is_moving_down);
-      //const spaces = mod(y_movement,150);
-      const spaces = Math.floor(y_movement/150);
-      const overflow = Math.abs(y_movement) % 150;
-      let moved_spaces = 0;
-      if (is_moving_down) {
-        moved_spaces = (overflow > 74) ? spaces+1 : spaces;
-      }
-      else {
-        moved_spaces = (overflow > 74) ? spaces-1 : spaces;
-      }
-      let new_index = this.state.task_index + moved_spaces;
-      /* Set edge cases */
-      if (new_index < 0) {
-        new_index = 0;
-      }
-      else if (new_index > this.props.task_array.length) {
-        new_index = this.props.task_array.length;
-      }
-      console.log("NEW INDEX: " + new_index);
-      //console.log("Spaces = " + spaces);
-      //console.log("Overflow = " + overflow);
-      //console.log("Moved spaces = " + this.state.spaces);
-
-
-      const new_y = new_index * 150;
-      console.log( "New Y = " + new_y);
-      /*
-      this.setState({
-        z_index: 0
-      });
-      */
       if (this.state.task_index !== new_index){
-        this.props.reorderTask(this.state.task_id, this.state.task_index, new_index);
+        this.props.reorderTask(this.props.item, this.state.task_index, new_index);
       }
       else {
         Animated.spring(
@@ -191,6 +137,7 @@ class SwipeableListItemContainer extends Component {
       return true;
     },
   });
+  /*
 
   /**
    * Deletes task based on id. Calls removeTask using props from actions.js.
@@ -203,7 +150,15 @@ class SwipeableListItemContainer extends Component {
     //console.log(this.props.item);
     //console.log(this.state.task_data);
     //console.log(task_data);
-    return <SwipeableListItem {...this.props} panHandlers={this.state.panResponder.panHandlers} _deleteTask={this._deleteTask} data={this.props.task_data[this.props.item]} navigation={this.props.navigation} _onLongPress={this._onLongPress} pan={this.state.pan} /*z_index={this.state.z_index}*/  _onReorderPress={this._onReorderPress}/>;
+    return <SwipeableListItem
+              {...this.props}
+              panHandlers={this.state.panResponder.panHandlers}
+              _deleteTask={this._deleteTask} 
+              data={this.props.task_data[this.props.item]}
+              navigation={this.props.navigation}
+              _onLongPress={this._onLongPress}
+              pan={this.state.pan}
+              _onReorderPress={this._onReorderPress}/>;
   }
 }
 

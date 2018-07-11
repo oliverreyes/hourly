@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import TaskView from './TaskView';
 import { putTask } from '../../redux/actions/actions';
 
-
+/**
+  * Container component
+  * @prop {} 
+  * @return
+  */
 class TaskViewContainer extends Component {
   constructor(props) {
     super(props);

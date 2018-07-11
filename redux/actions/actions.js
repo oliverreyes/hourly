@@ -174,7 +174,6 @@ export function putTask(task_id, input_title, input_dl, input_notif, input_exp, 
 }
 
 export function shuffleTask(id_array, old_pos, new_pos) {
-  /* TODO Still old array */
   let copy_array = id_array.slice();
   console.log(copy_array);
   copy_array.splice(new_pos, 0, copy_array.splice(old_pos, 1)[0]);

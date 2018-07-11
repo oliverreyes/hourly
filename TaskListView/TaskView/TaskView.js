@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, TextInput, TouchableOpacity } from 'react-native';
 
+/**
+  * Presentational component
+  * @prop {}
+  * @return
+  */
 export default class TaskView extends React.Component {
   render() {
     //console.log(this.props.navigation.state.params.text);
