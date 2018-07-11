@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import TaskView from './TaskView';
 import { putTask } from '../../redux/actions/actions';
 
-
+/**
+  * Container component
+  * @prop {} 
+  * @return
+  */
 class TaskViewContainer extends Component {
   constructor(props) {
     super(props);
@@ -12,8 +16,8 @@ class TaskViewContainer extends Component {
       title: "",
       dl: "",
       notif: "",
-      repeat: "",
-      notes: "",
+      exp: "",
+      status: "",
       show_text_input: false,
       modified: false
     };
@@ -22,8 +26,8 @@ class TaskViewContainer extends Component {
     this._changeTitle = this._changeTitle.bind(this);
     this._changeDl = this._changeDl.bind(this);
     this._changeNotif = this._changeNotif.bind(this);
-    this._changeRepeat = this._changeRepeat.bind(this);
-    this._changeNotes = this._changeNotes.bind(this);
+    this._changeExp = this._changeExp.bind(this);
+    this._changeStatus = this._changeStatus.bind(this);
   }
 
   componentDidMount(){
@@ -37,8 +41,8 @@ class TaskViewContainer extends Component {
       title: data.title,
       dl: data.deadline,
       notif: data.notifications,
-      repeat: data.repeat,
-      notes: data.notes
+      exp: data.exp,
+      status: data.status
     });
   }
 
@@ -69,16 +73,16 @@ class TaskViewContainer extends Component {
       });
   }
 
-  _changeRepeat(new_input){
+  _changeExp(new_input){
       this.setState({
-        repeat: new_input,
+        exp: new_input,
         modified: true
       });
   }
 
-  _changeNotes(new_input){
+  _changeStatus(new_input){
       this.setState({
-        notes: new_input,
+        status: new_input,
         modified: true
       });
   }
@@ -89,8 +93,8 @@ class TaskViewContainer extends Component {
       this.state.title,
       this.state.dl,
       this.state.notif,
-      this.state.repeat,
-      this.state.notes);
+      this.state.exp,
+      this.state.status);
     this.setState({
       modified: false
     });
@@ -104,13 +108,13 @@ class TaskViewContainer extends Component {
     _changeTitle={(title) => this._changeTitle(title)}
     _changeDl={(dl) => this._changeDl(dl)}
     _changeNotif={(notif) => this._changeNotif(notif)}
-    _changeRepeat={(repeat) => this._changeRepeat(repeat)}
-    _changeNotes={(notes) => this._changeNotes(notes)}
+    _changeExp={(exp) => this._changeExp(exp)}
+    _changeStatus={(status) => this._changeStatus(status)}
     title={this.state.title}
     dl={this.state.dl}
-    repeat={this.state.repeat}
+    exp={this.state.exp}
     notif={this.state.notif}
-    notes={this.state.notes}
+    status={this.state.status}
     modified={this.state.modified} />;
   }
 }

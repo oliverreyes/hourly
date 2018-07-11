@@ -7,7 +7,11 @@ import {
   RECEIVE_TASKS
 } from '../redux/actions/actions';
 
-
+/**
+  * Presentational component sets background style, displays list
+  * @prop {array} id_array array of ids for ordering
+  * @return SwipeableListContainer component
+  */
 class TaskListView extends Component {
   //May want to change how this works... separation of concerns
   /*
@@ -21,7 +25,7 @@ class TaskListView extends Component {
     return (
       <View style={styles.container}>
         <SwipeableListContainer
-          data={this.props.id_array}
+          id_array={this.props.id_array}
           navigation={this.props.navigation}
         />
       </View>

@@ -9,12 +9,11 @@ import {
 } from '../../../redux/actions/actions';
 
 
-/* Need to set this async POST function in the actions module +
- * Call that function via dispatch from here +
- * Use the state as params for text +
- * Post it to the store, then post it to DB +
- * Update the list to reflect new task +
-*/
+/**
+  * Container component
+  * @prop {}
+  * @return
+  */
 class InputListItemContainer extends Component {
   constructor(props) {
     super(props);
@@ -42,20 +41,21 @@ class InputListItemContainer extends Component {
 
   _createTask(){
     const complete_input = this.state.input;
-    this.props.postTask(complete_input);
+    const order = this.props.task_array.length;
+    this.props.postTask(complete_input, order);
     this.setState({
       input: "",
       show_text_input: false
     });
   }
-  
+
   render() {
     return <InputListItem {...this.props} _createTask={this._createTask} _showTextInput={() => this._showTextInput()} input={this.state.input} show_text_input={this.state.show_text_input} _changeInput={(input) => this._changeInput(input)}/>;
   }
 }
 
-const mapStateToProps = tasks => {
-  return { tasks }
+const mapStateToProps = ({ tasks }) => {
+  return { task_array: tasks.task_list.allIds }
 };
 
 const bindActionsToDispatch = dispatch =>

@@ -5,6 +5,7 @@ export const RECEIVE_TASKS = 'RECEIVE_TASKS'
 export const CREATE_TASK = 'CREATE_TASK'
 export const DELETE_TASK = 'DELETE_TASK'
 export const MODIFY_TASK = 'MODIFY_TASK'
+export const REORDER_TASK = 'REORDER_TASK'
 export const REFRESH_TASKS = 'REFRESH_TASKS'
 export const ERROR_FETCH = 'ERROR_FETCH'
 
@@ -58,6 +59,14 @@ export function modifyTask(task_id, content) {
   }
 }
 
+/* Reorder a task  */
+export function reorderTask(old_pos, new_pos) {
+  return {
+    type: REORDER_TASK,
+    payload: { old_pos, new_pos }
+  }
+}
+
 /* Refresh task lists */
 export function refreshTasks() {
   return {
@@ -73,7 +82,7 @@ export function fetchTasks() {
   return async (dispatch) => {
     try {
       let response = await fetch(
-        'http://192.168.1.134.xip.io:5000/get_tasks'
+        'http://192.168.1.114.xip.io:5000/get_tasks'
       );
       let response_json = await response.json();
       console.log(response_json);
@@ -93,7 +102,7 @@ export function postTask(input) {
       console.log("POSTING");
       console.log(input);
       let response = await fetch(
-        'http://192.168.1.134.xip.io:5000/create_task', {
+        'http://192.168.1.114.xip.io:5000/create_task', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -102,8 +111,8 @@ export function postTask(input) {
             title: input,
             deadline: null,
             notifications: false,
-            repeat: false,
-            notes: null
+            exp: 5,
+            status: "todo"
           }),
         });
       let response_json = await response.json();
@@ -121,7 +130,7 @@ export function removeTask(task_id) {
     try {
       console.log("REMOVING");
       let response = await fetch(
-        'http://192.168.1.134.xip.io:5000/delete_task/'+task_id, {
+        'http://192.168.1.114.xip.io:5000/delete_task/'+task_id, {
           method: 'DELETE'
         });
       let response_json = await response.json();
@@ -134,13 +143,13 @@ export function removeTask(task_id) {
   }
 }
 
-export function putTask(task_id, input_title, input_dl, input_notif, input_repeat, input_notes ) {
+export function putTask(task_id, input_title, input_dl, input_notif, input_exp, input_status, input_order ) {
   console.log(task_id);
   return async (dispatch) => {
     try {
       console.log("UPDATING");
       let response = await fetch(
-        'http://192.168.1.134.xip.io:5000/update_task/'+task_id, {
+        'http://192.168.1.114.xip.io:5000/update_task/'+task_id, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -149,14 +158,41 @@ export function putTask(task_id, input_title, input_dl, input_notif, input_repea
             title: input_title,
             deadline: input_dl,
             notifications: input_notif,
-            repeat: input_repeat,
-            notes: input_notes
+            exp: input_exp,
+            status: input_status
           }),
         });
       let response_json = await response.json();
       console.log(response_json[0]);
       let modded_task = await dispatch(modifyTask(task_id, response_json[0]));
       console.log(modded_task);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+
+export function shuffleTask(id_array, old_pos, new_pos) {
+  let copy_array = id_array.slice();
+  console.log(copy_array);
+  copy_array.splice(new_pos, 0, copy_array.splice(old_pos, 1)[0]);
+  console.log(copy_array);
+  return async (dispatch) => {
+    try {
+      console.log("Shuffling");
+      let response = await fetch(
+        'http://192.168.1.114.xip.io:5000/reorder_tasks', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(copy_array),
+        });
+      let response_json = await response.json();
+      console.log(response_json);
+      let reorder_task = await dispatch(reorderTask(old_pos, new_pos));
+      console.log(reorder_task);
 
     } catch (error) {
       console.error(error);

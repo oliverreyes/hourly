@@ -5,6 +5,11 @@ import HomeView from '../HomeView/HomeView';
 //import TaskView from '../TaskListView/TaskView/TaskView';
 import TaskStack from './TaskStack';
 
+/**
+  * Navigational component
+  * @prop {}
+  * @return
+  */
 const Navigator =  TabNavigator(
   {
     Home: { screen: HomeView },

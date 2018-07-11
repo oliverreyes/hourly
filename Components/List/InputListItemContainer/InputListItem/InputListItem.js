@@ -6,6 +6,11 @@ import {
   RECEIVE_TASKS
 } from '../../../../redux/actions/actions';
 
+/**
+  * Presentational component
+  * @prop {}
+  * @return
+  */
 export default class InputListItem extends Component {
   render() {
     console.log(this.props);

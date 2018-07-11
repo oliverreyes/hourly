@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import Footer from '../Components/Footer';
 
-
+/**
+  * Presentational component
+  * @return View, Button components
+  */
 class GoalListView extends React.Component {
   render() {
     return (

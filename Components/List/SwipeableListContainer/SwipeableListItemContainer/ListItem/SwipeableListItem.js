@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, Button, Animated } from 'react-native';
 import {
   deleteTasks
 } from '../../../../../redux/actions/actions';
 
+/**
+  * Presentational component
+  * @prop {obj} navigation navigation props
+  * @return
+  */
 export default class SwipeableListItem extends React.Component {
   render() {
     const {navigate} = this.props.navigation;
-    const {id, title, notes, notifications, repeat, deadline} = this.props.data;
+    const {title} = (this.props.data != null) ? this.props.data : '';
+    console.log(this.props.data);
     return (
-      <View style={styles.list_box}>
-        <TouchableHighlight onPress={this.props._getSelectedId}>
-          <View>
+      <Animated.View style={[this.props.pan.getLayout(), styles.list_box]} {...this.props.panHandlers}>
+        <TouchableHighlight onLongPress={this.props._onLongPress} activeOpacity={0.3} onPress={this.props._onReorderPress} >
+          <View >
             <Text style={styles.list_text}>{title}</Text>
             <Button
               onPress={this.props._deleteTask}
@@ -20,12 +26,6 @@ export default class SwipeableListItem extends React.Component {
             />
             <Button
                 onPress={() => navigate('TaskView', {
-                  /*title: title,
-                  deadline: deadline,
-                  notifications: notifications,
-                  repeat: repeat,
-                  notes: notes,
-                  id: id */
                   data: this.props.data
                 }
               )}
@@ -34,7 +34,7 @@ export default class SwipeableListItem extends React.Component {
             />
           </View>
         </TouchableHighlight>
-      </View>
+      </Animated.View>
     );
   }
 }
@@ -43,7 +43,9 @@ const styles = StyleSheet.create({
   list_box: {
     alignSelf: 'stretch',
     paddingVertical: 10,
-    flex: 1
+    flex: 1,
+    backgroundColor: 'white',
+    height: 150
   },
   list_text: {
     fontSize: 28,
