@@ -6,6 +6,8 @@ export const CREATE_TASK = 'CREATE_TASK'
 export const DELETE_TASK = 'DELETE_TASK'
 export const MODIFY_TASK = 'MODIFY_TASK'
 export const REORDER_TASK = 'REORDER_TASK'
+export const REORDER_TASK_ROLLBACK = 'REORDER_TASK_ROLLBACK'
+export const REORDER_TASK_COMMIT = 'REORDER_TASK_COMMIT'
 export const REFRESH_TASKS = 'REFRESH_TASKS'
 export const ERROR_FETCH = 'ERROR_FETCH'
 
@@ -60,10 +62,40 @@ export function modifyTask(task_id, content) {
 }
 
 /* Reorder a task  */
-export function reorderTask(old_pos, new_pos) {
+export function reorderTask(id_array, old_pos, new_pos) {
+  let copy_array = id_array.slice();
+  console.log(copy_array);
+  copy_array.splice(new_pos, 0, copy_array.splice(old_pos, 1)[0]);
+
+  /*
+  else {
+    copy_array.splice(new_pos-1, 0, copy_array.splice(old_pos, 1)[0]);
+  }
+  */
+  console.log(copy_array);
   return {
     type: REORDER_TASK,
-    payload: { old_pos, new_pos }
+    payload: {
+      new_array: copy_array
+    },
+    meta: {
+      offline: {
+        effect: {
+          url: 'http://192.168.1.114.xip.io:5000/reorder_tasks',
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(copy_array)
+        },
+        commit: {
+          type: REORDER_TASK_COMMIT,
+          meta: { new_array: copy_array }
+        },
+        rollback: {
+          type: REORDER_TASK_ROLLBACK,
+          //meta: { old_array: id_array }
+        }
+      }
+    }
   }
 }
 
@@ -166,33 +198,6 @@ export function putTask(task_id, input_title, input_dl, input_notif, input_exp, 
       console.log(response_json[0]);
       let modded_task = await dispatch(modifyTask(task_id, response_json[0]));
       console.log(modded_task);
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-}
-
-export function shuffleTask(id_array, old_pos, new_pos) {
-  let copy_array = id_array.slice();
-  console.log(copy_array);
-  copy_array.splice(new_pos, 0, copy_array.splice(old_pos, 1)[0]);
-  console.log(copy_array);
-  return async (dispatch) => {
-    try {
-      console.log("Shuffling");
-      let response = await fetch(
-        'http://192.168.1.114.xip.io:5000/reorder_tasks', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(copy_array),
-        });
-      let response_json = await response.json();
-      console.log(response_json);
-      let reorder_task = await dispatch(reorderTask(old_pos, new_pos));
-      console.log(reorder_task);
 
     } catch (error) {
       console.error(error);

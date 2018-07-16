@@ -50,20 +50,16 @@ class SwipeableListItemContainer extends Component {
     if (this.props.reorder_toggle){
       console.log("NEW INDEX: " + this_index);
       console.log("OLD INDEX: " + this.props.old_index);
-      if (this.props.old_index !== this_index && (this.props.old_index+1 !== this_index)){
+      if (this.props.old_index !== this_index){
 
         /* Set to null and toggle reorder back */
         //this.props._updateReorderIdx(null);
         //this.props._toggleReorder();
-        this.props.shuffleTask(this.props.task_array, this.props.old_index, this_index);
+
+        //this.props.shuffleTask(this.props.task_array, this.props.old_index, this_index);
+        this.props.reorderTask(this.props.task_array, this.props.old_index, this_index);
       }
       this.props._toggleReorder();
-      /*
-      else {
-        this.props._updateReorderIdx(null);
-        this.props._toggleReorder();
-      }
-      */
     }
   }
   /**
@@ -153,7 +149,7 @@ class SwipeableListItemContainer extends Component {
     return <SwipeableListItem
               {...this.props}
               panHandlers={this.state.panResponder.panHandlers}
-              _deleteTask={this._deleteTask} 
+              _deleteTask={this._deleteTask}
               data={this.props.task_data[this.props.item]}
               navigation={this.props.navigation}
               _onLongPress={this._onLongPress}
@@ -172,6 +168,7 @@ const bindActionsToDispatch = dispatch =>
 (
   {
     removeTask : (task_id) => dispatch(removeTask(task_id)),
+    reorderTask : (id_array, old_pos, new_pos) => dispatch(reorderTask(id_array, old_pos, new_pos)),
     shuffleTask : (id_array, old_pos, new_pos) => dispatch(shuffleTask(id_array, old_pos, new_pos))
   }
 );

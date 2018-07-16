@@ -6,7 +6,9 @@ import {
   RECEIVE_TASKS,
   DELETE_TASK,
   MODIFY_TASK,
-  REORDER_TASK
+  REORDER_TASK,
+  REORDER_TASK_COMMIT,
+  REORDER_TASK_ROLLBACK
  } from '../actions/actions';
 
 const tasks = (
@@ -15,7 +17,8 @@ const tasks = (
     isStale: false,
     task_list: {
       byId: {},
-      allIds: []
+      allIds: [],
+      prevIds: []
     }
   }, action
 ) => {
@@ -37,7 +40,8 @@ const tasks = (
         isStale: false,
         task_list: {
           byId: tasksById,
-          allIds: ids_array
+          allIds: ids_array,
+          prevIds: ids_array
         }
       }
     case CREATE_TASK:
@@ -51,6 +55,10 @@ const tasks = (
           allIds: [
             ...state.task_list.allIds,
             action.payload.id
+          ],
+          prevIds: [
+            ...state.task_list.prevIds,
+            action.payload.id
           ]
         }
       }
@@ -63,6 +71,9 @@ const tasks = (
           byId: new_byId,
           allIds: [
             ...state.task_list.allIds.filter(id => id !== action.payload)
+          ],
+          prevIds: [
+            ...state.task_list.prevIds.filter(id => id !== action.payload)
           ]
         }
       }
@@ -83,30 +94,23 @@ const tasks = (
      * will affect the indices of the proceding ids.
      */
     case REORDER_TASK:
-      const copy_allIds = state.task_list.allIds.slice();
-      const reorder_id = copy_allIds[action.payload.old_pos];
-      let mod_allIds = copy_allIds.filter((id) => id !== reorder_id);
-      let new_allIds = [];
-      if (action.payload.new_pos === 0){
-        //console.log("New idx is 0");
-        new_allIds = [reorder_id, ...mod_allIds];
-      }
-      else if (action.payload.old_pos > action.payload.new_pos){
-        //console.log("OLD > NEW");
-        new_allIds = [...mod_allIds.slice(0, action.payload.new_pos), reorder_id, ...mod_allIds.slice(action.payload.new_pos)];
-      }
-      else if (action.payload.old_pos < action.payload.new_pos){
-        //console.log("OLD < NEW");
-        new_allIds = [...mod_allIds.slice(0, action.payload.new_pos-1), reorder_id, ...mod_allIds.slice(action.payload.new_pos-1)];
-      }
-      else {
-        console.log("ERROR NEW IDX: " + action.payload.new_pos);
-      }
-      //console.log("THIS ID: " + reorder_id);
-      //console.log("ALL: " + new_allIds);
       return { ...state,
         task_list: { ...state.task_list,
-          allIds: new_allIds
+          allIds: action.payload.new_array
+        }
+      }
+    case REORDER_TASK_COMMIT:
+      console.log(action.meta.new_array);
+      return { ...state,
+        task_list: { ...state.task_list,
+          prevIds: action.meta.new_array
+        }
+      }
+    case REORDER_TASK_ROLLBACK:
+      //console.log(action.payload.old_array);
+      return { ...state,
+        task_list: { ...state.task_list,
+          allIds: state.task_list.prevIds
         }
       }
     default:
