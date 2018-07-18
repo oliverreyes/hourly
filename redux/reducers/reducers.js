@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import {
   CREATE_TASK,
+  CREATE_TASK_COMMIT,
+  CREATE_TASK_ROLLBACK,
   REQUEST_TASKS,
   REQUEST_SINGLE_TASK,
   RECEIVE_TASKS,
@@ -15,6 +17,7 @@ const tasks = (
   state = {
     isFetching: false,
     isStale: false,
+    isTemp: false,
     task_list: {
       byId: {},
       allIds: [],
@@ -45,7 +48,9 @@ const tasks = (
         }
       }
     case CREATE_TASK:
+      console.log("TEMPID: " + action.payload.id);
       return { ...state,
+        isTemp: true,
         task_list: {
           ...state.task_list,
           byId: {
@@ -55,20 +60,51 @@ const tasks = (
           allIds: [
             ...state.task_list.allIds,
             action.payload.id
-          ],
-          prevIds: [
-            ...state.task_list.prevIds,
-            action.payload.id
+          ]
+        }
+      }
+    case CREATE_TASK_COMMIT:
+      const delete_id_commit = action.meta.tempid.toString();
+      const { [delete_id_commit] : val_c, ...commit_byId } = state.task_list.byId;
+      const ids = state.task_list.allIds.filter(id => id !== action.meta.tempid);
+      const new_allIds = [...ids, action.payload.id];
+      console.log("TEMPID: " + action.meta.tempid);
+      console.log("ID: " + action.payload.id);
+      console.log(val_c);
+      console.log(commit_byId);
+      console.log("new_allIDs: " + new_allIds);
+      return { ...state,
+        isTemp: false,
+        task_list: {
+          ...state.task_list,
+          byId: {
+            ...commit_byId,
+            [action.payload.id] : { ...val_c, id: action.payload.id }
+          },
+          allIds: new_allIds,
+          prevIds: new_allIds
+        }
+      }
+    case CREATE_TASK_ROLLBACK:
+      const delete_id_rb = action.meta.tempid.toString();
+      const { [delete_id_rb] : val_rb, ...rb_byId } = state.task_list.byId;
+      return { ...state,
+        isTemp: false,
+        task_list: {
+          ...state.task_list,
+          byId: rb_byId,
+          allIds: [
+            ...state.task_list.allIds.filter(id => id !== action.meta.tempid)
           ]
         }
       }
     case DELETE_TASK:
-      const id_to_delete = action.payload.toString();
+      const delete_id = action.payload.toString();
       const old_state = state.task_list.byId;
-      const { [id_to_delete] : value, ...new_byId } = old_state;
+      const { [delete_id] : value, ...del_byId } = old_state;
       return { ...state,
         task_list: {
-          byId: new_byId,
+          byId: del_byId,
           allIds: [
             ...state.task_list.allIds.filter(id => id !== action.payload)
           ],

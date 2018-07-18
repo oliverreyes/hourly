@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { PanResponder, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import SwipeableListItem from './ListItem/SwipeableListItem';
-import { removeTask, reorderTask, shuffleTask } from '../../../../redux/actions/actions';
+import { removeTask, reorderTask } from '../../../../redux/actions/actions';
 
 
 /**
@@ -145,7 +145,7 @@ class SwipeableListItemContainer extends Component {
   render() {
     //console.log(this.props.item);
     //console.log(this.state.task_data);
-    //console.log(task_data);
+    console.log(this.props.task_data);
     return <SwipeableListItem
               {...this.props}
               panHandlers={this.state.panResponder.panHandlers}
@@ -168,8 +168,7 @@ const bindActionsToDispatch = dispatch =>
 (
   {
     removeTask : (task_id) => dispatch(removeTask(task_id)),
-    reorderTask : (id_array, old_pos, new_pos) => dispatch(reorderTask(id_array, old_pos, new_pos)),
-    shuffleTask : (id_array, old_pos, new_pos) => dispatch(shuffleTask(id_array, old_pos, new_pos))
+    reorderTask : (id_array, old_pos, new_pos) => dispatch(reorderTask(id_array, old_pos, new_pos))
   }
 );
 

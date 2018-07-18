@@ -3,6 +3,8 @@ export const REQUEST_TASKS = 'REQUEST_TASKS'
 export const REQUEST_SINGLE_TASK = 'REQUEST_SINGLE_TASK'
 export const RECEIVE_TASKS = 'RECEIVE_TASKS'
 export const CREATE_TASK = 'CREATE_TASK'
+export const CREATE_TASK_COMMIT = 'CREATE_TASK_COMMIT'
+export const CREATE_TASK_ROLLBACK = 'CREATE_TASK_ROLLBACK'
 export const DELETE_TASK = 'DELETE_TASK'
 export const MODIFY_TASK = 'MODIFY_TASK'
 export const REORDER_TASK = 'REORDER_TASK'
@@ -37,10 +39,41 @@ export function receiveTasks(tasks) {
 }
 
 /* POST a new task to store */
-export function createTask(new_task) {
+export function createTask(input, tempid) {
   return {
     type: CREATE_TASK,
-    payload: new_task
+    payload: {
+      title: input,
+      deadline: null,
+      notifications: false,
+      exp: 5,
+      status: "todo",
+      id: tempid
+    },
+    meta: {
+      offline: {
+        effect: {
+          url: 'http://192.168.1.114.xip.io:5000/create_task',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: input,
+            deadline: null,
+            notifications: false,
+            exp: 5,
+            status: "todo"
+          }),
+        },
+        commit: {
+          type: CREATE_TASK_COMMIT,
+          meta: { tempid }
+        },
+        rollback: {
+          type: CREATE_TASK_ROLLBACK,
+          meta: { tempid}
+        }
+      }
+    }
   }
 }
 
@@ -66,12 +99,6 @@ export function reorderTask(id_array, old_pos, new_pos) {
   let copy_array = id_array.slice();
   console.log(copy_array);
   copy_array.splice(new_pos, 0, copy_array.splice(old_pos, 1)[0]);
-
-  /*
-  else {
-    copy_array.splice(new_pos-1, 0, copy_array.splice(old_pos, 1)[0]);
-  }
-  */
   console.log(copy_array);
   return {
     type: REORDER_TASK,
@@ -126,7 +153,7 @@ export function fetchTasks() {
     }
   }
 }
-
+/*
 export function postTask(input) {
   console.log(input);
   return async (dispatch) => {
@@ -155,6 +182,7 @@ export function postTask(input) {
     }
   }
 }
+*/
 
 export function removeTask(task_id) {
   console.log(task_id);

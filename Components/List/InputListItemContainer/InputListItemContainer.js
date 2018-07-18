@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import InputListItem from './InputListItem/InputListItem';
+//import tempIdGenerator from '../../../utils/tempIdGenerator';
 import {
   fetchTasks,
   postTask,
   REQUEST_TASKS,
-  RECEIVE_TASKS
+  RECEIVE_TASKS,
+  createTask
 } from '../../../redux/actions/actions';
 
 
@@ -40,9 +42,9 @@ class InputListItemContainer extends Component {
   }
 
   _createTask(){
-    const complete_input = this.state.input;
-    const order = this.props.task_array.length;
-    this.props.postTask(complete_input, order);
+    const tempid = Date.now() * this.props.task_array.length;
+    console.log(tempid);
+    this.props.createTask(this.state.input, tempid);
     this.setState({
       input: "",
       show_text_input: false
@@ -61,7 +63,8 @@ const mapStateToProps = ({ tasks }) => {
 const bindActionsToDispatch = dispatch =>
 (
   {
-    postTask : (input) => dispatch(postTask(input))
+    postTask : (input) => dispatch(postTask(input)),
+    createTask : (input, tempid) => dispatch(createTask(input, tempid))
   }
 );
 
