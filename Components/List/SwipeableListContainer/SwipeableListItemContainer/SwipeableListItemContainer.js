@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { PanResponder, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import SwipeableListItem from './ListItem/SwipeableListItem';
-import { removeTask, reorderTask } from '../../../../redux/actions/actions';
+import { deleteTask, reorderTask } from '../../../../redux/actions/actions';
 
 
 /**
@@ -139,7 +139,7 @@ class SwipeableListItemContainer extends Component {
    * Deletes task based on id. Calls removeTask using props from actions.js.
    */
   _deleteTask() {
-    this.props.removeTask(this.props.item);
+    this.props.deleteTask(this.props.item);
   }
 
   render() {
@@ -168,6 +168,7 @@ const bindActionsToDispatch = dispatch =>
 (
   {
     removeTask : (task_id) => dispatch(removeTask(task_id)),
+    deleteTask : (task_id) => dispatch(deleteTask(task_id)),
     reorderTask : (id_array, old_pos, new_pos) => dispatch(reorderTask(id_array, old_pos, new_pos))
   }
 );

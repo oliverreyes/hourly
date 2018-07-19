@@ -7,6 +7,8 @@ import {
   REQUEST_SINGLE_TASK,
   RECEIVE_TASKS,
   DELETE_TASK,
+  DELETE_TASK_COMMIT,
+  DELETE_TASK_ROLLBACK,
   MODIFY_TASK,
   REORDER_TASK,
   REORDER_TASK_COMMIT,
@@ -18,6 +20,7 @@ const tasks = (
     isFetching: false,
     isStale: false,
     isTemp: false,
+    isRollback: false,
     task_list: {
       byId: {},
       allIds: [],
@@ -90,27 +93,52 @@ const tasks = (
       const { [delete_id_rb] : val_rb, ...rb_byId } = state.task_list.byId;
       return { ...state,
         isTemp: false,
-        task_list: {
-          ...state.task_list,
+        isRollback: true,
+        task_list: { ...state.task_list,
           byId: rb_byId,
           allIds: [
             ...state.task_list.allIds.filter(id => id !== action.meta.tempid)
           ]
         }
       }
+    /**
+     * Delete task removes id from current id array.
+     */
     case DELETE_TASK:
+      //const delete_id = action.payload.toString();
+      //const old_state = state.task_list.byId;
+      //const { [delete_id] : value, ...del_byId } = old_state;
+      return { ...state,
+        task_list: { ...state.task_list,
+          //byId: del_byId,
+          allIds: [
+            ...state.task_list.allIds.filter(id => id !== action.payload)
+          ],
+          //prevIds: [
+          //  ...state.task_list.prevIds.filter(id => id !== action.payload)
+          //]
+        }
+      }
+    /**
+     * Delete commit removes task from byId and updates history to current order.
+     */
+    case DELETE_TASK_COMMIT:
       const delete_id = action.payload.toString();
       const old_state = state.task_list.byId;
       const { [delete_id] : value, ...del_byId } = old_state;
       return { ...state,
-        task_list: {
+        task_list: { ...state.task_list,
           byId: del_byId,
-          allIds: [
-            ...state.task_list.allIds.filter(id => id !== action.payload)
-          ],
-          prevIds: [
-            ...state.task_list.prevIds.filter(id => id !== action.payload)
-          ]
+          prevIds: state.task_list.allIds
+        }
+      }
+    /**
+     * Delete rollback reverts current order back to saved history.
+     */
+    case DELETE_TASK_ROLLBACK:
+      return { ...state,
+        task_list: { ...state.task_list,
+          allIds: state.task_list.prevIds
         }
       }
     // Update corresponding task
@@ -135,6 +163,10 @@ const tasks = (
           allIds: action.payload.new_array
         }
       }
+    /**
+     * Reorder commit sets the prevIds anchor point to the current order,
+     * establishing a new baseline for future reorders.
+     */
     case REORDER_TASK_COMMIT:
       console.log(action.meta.new_array);
       return { ...state,
@@ -142,9 +174,12 @@ const tasks = (
           prevIds: action.meta.new_array
         }
       }
+    /**
+     * Reorder rollback sets the current order back to the previously saved order.
+     */
     case REORDER_TASK_ROLLBACK:
-      //console.log(action.payload.old_array);
       return { ...state,
+        isRollback: true,
         task_list: { ...state.task_list,
           allIds: state.task_list.prevIds
         }

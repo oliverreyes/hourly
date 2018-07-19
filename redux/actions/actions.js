@@ -6,6 +6,8 @@ export const CREATE_TASK = 'CREATE_TASK'
 export const CREATE_TASK_COMMIT = 'CREATE_TASK_COMMIT'
 export const CREATE_TASK_ROLLBACK = 'CREATE_TASK_ROLLBACK'
 export const DELETE_TASK = 'DELETE_TASK'
+export const DELETE_TASK_COMMIT = 'DELETE_TASK_COMMIT'
+export const DELETE_TASK_ROLLBACK = 'DELETE_TASK_ROLLBACK'
 export const MODIFY_TASK = 'MODIFY_TASK'
 export const REORDER_TASK = 'REORDER_TASK'
 export const REORDER_TASK_ROLLBACK = 'REORDER_TASK_ROLLBACK'
@@ -81,7 +83,21 @@ export function createTask(input, tempid) {
 export function deleteTask(task_id) {
   return {
     type: DELETE_TASK,
-    payload: task_id
+    payload: task_id,
+    meta: {
+      offline: {
+        effect: {
+          url: 'http://192.168.1.114.xip.io:5000/delete_task/'+task_id,
+          method: 'DELETE'
+        },
+        commit: {
+          type: DELETE_TASK_COMMIT
+        },
+        rollback: {
+          type: DELETE_TASK_ROLLBACK
+        }
+      }
+    }
   }
 }
 
@@ -97,14 +113,12 @@ export function modifyTask(task_id, content) {
 /* Reorder a task  */
 export function reorderTask(id_array, old_pos, new_pos) {
   let copy_array = id_array.slice();
-  console.log(copy_array);
+  //console.log(copy_array);
   copy_array.splice(new_pos, 0, copy_array.splice(old_pos, 1)[0]);
-  console.log(copy_array);
+  //console.log(copy_array);
   return {
     type: REORDER_TASK,
-    payload: {
-      new_array: copy_array
-    },
+    payload: { new_array: copy_array },
     meta: {
       offline: {
         effect: {
@@ -117,10 +131,7 @@ export function reorderTask(id_array, old_pos, new_pos) {
           type: REORDER_TASK_COMMIT,
           meta: { new_array: copy_array }
         },
-        rollback: {
-          type: REORDER_TASK_ROLLBACK,
-          //meta: { old_array: id_array }
-        }
+        rollback: { type: REORDER_TASK_ROLLBACK }
       }
     }
   }
@@ -154,36 +165,6 @@ export function fetchTasks() {
   }
 }
 /*
-export function postTask(input) {
-  console.log(input);
-  return async (dispatch) => {
-    try {
-      console.log("POSTING");
-      console.log(input);
-      let response = await fetch(
-        'http://192.168.1.114.xip.io:5000/create_task', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            title: input,
-            deadline: null,
-            notifications: false,
-            exp: 5,
-            status: "todo"
-          }),
-        });
-      let response_json = await response.json();
-      let post_task = await dispatch(createTask(response_json));
-      console.log(post_task);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-}
-*/
-
 export function removeTask(task_id) {
   console.log(task_id);
   return async (dispatch) => {
@@ -202,6 +183,7 @@ export function removeTask(task_id) {
     }
   }
 }
+*/
 
 export function putTask(task_id, input_title, input_dl, input_notif, input_exp, input_status, input_order ) {
   console.log(task_id);
