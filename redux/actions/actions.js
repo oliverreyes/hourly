@@ -49,8 +49,9 @@ export function createTask(input, tempid) {
       deadline: null,
       notifications: false,
       exp: 5,
-      status: "todo",
-      id: tempid
+      id: tempid,
+      completed: null,
+      isTemp: true
     },
     meta: {
       offline: {
@@ -63,7 +64,9 @@ export function createTask(input, tempid) {
             deadline: null,
             notifications: false,
             exp: 5,
-            status: "todo"
+            completed: null,
+            fin_order: null,
+            fin_date: null
           }),
         },
         commit: {

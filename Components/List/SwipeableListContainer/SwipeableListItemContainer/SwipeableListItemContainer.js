@@ -139,7 +139,9 @@ class SwipeableListItemContainer extends Component {
    * Deletes task based on id. Calls removeTask using props from actions.js.
    */
   _deleteTask() {
-    this.props.deleteTask(this.props.item);
+    if (!this.props.task_data[this.props.item].isTemp){
+      this.props.deleteTask(this.props.item);
+    }
   }
 
   render() {

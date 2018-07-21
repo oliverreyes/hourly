@@ -103,17 +103,18 @@ def update_task(task_id):
 # Update reorder values using passed id array
 @app.route('/reorder_tasks', methods=['PUT'])
 def reorder_tasks():
-    print("Reordering...")
-    payload = request.get_json(force=True)
-    print(payload)
-    new_index = 0
-    for id in payload:
-        # Query specified task
-        task = Task.query.get(id)
-        task.order = new_index
-        new_index += 1
-        print(task)
-    db.session.commit()
-    tasks = Task.query.all()
-    result = tasks_schema.dump(tasks)
-    return jsonify(result.data)
+    try:
+        print("Reordering...")
+        payload = request.get_json(force=True)
+        print(payload)
+        new_index = 0
+        for id in payload:
+            # Query specified task
+            task = Task.query.get(id)
+            task.order = new_index
+            new_index += 1
+            print(task)
+            db.session.commit()
+    except Exception as e:
+        print("Reordering error {}".format(e))
+    return "DONE"

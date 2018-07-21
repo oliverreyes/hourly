@@ -19,7 +19,6 @@ const tasks = (
   state = {
     isFetching: false,
     isStale: false,
-    isTemp: false,
     isRollback: false,
     task_list: {
       byId: {},
@@ -53,7 +52,6 @@ const tasks = (
     case CREATE_TASK:
       console.log("TEMPID: " + action.payload.id);
       return { ...state,
-        isTemp: true,
         task_list: {
           ...state.task_list,
           byId: {
@@ -77,12 +75,14 @@ const tasks = (
       console.log(commit_byId);
       console.log("new_allIDs: " + new_allIds);
       return { ...state,
-        isTemp: false,
         task_list: {
           ...state.task_list,
           byId: {
             ...commit_byId,
-            [action.payload.id] : { ...val_c, id: action.payload.id }
+            [action.payload.id] : { ...val_c,
+              id: action.payload.id,
+              isTemp: false
+            }
           },
           allIds: new_allIds,
           prevIds: new_allIds
@@ -92,7 +92,6 @@ const tasks = (
       const delete_id_rb = action.meta.tempid.toString();
       const { [delete_id_rb] : val_rb, ...rb_byId } = state.task_list.byId;
       return { ...state,
-        isTemp: false,
         isRollback: true,
         task_list: { ...state.task_list,
           byId: rb_byId,

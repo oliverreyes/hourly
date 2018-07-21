@@ -1,5 +1,6 @@
 from HourlyAPI import db, ma
 
+
 # SQLAlchemy Models
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -10,22 +11,27 @@ class User(db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
+
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64), index=True)
     deadline = db.Column(db.DateTime, index=True)
     notifications = db.Column(db.Boolean)
     exp = db.Column(db.Integer, index=True)
-    status = db.Column(db.String(16), index=True)
+    completed = db.Column(db.Boolean)
     order = db.Column(db.Integer, index=True)
+    fin_order = db.Column(db.Integer, index=True)
+    fin_date = db.Column(db.DateTime, index=True)
 
     def __repr__(self):
         return '<Task {}'.format(self.title)
+
 
 # Marshmallow Schemas based on above models
 class UserSchema(ma.ModelSchema):
     class Meta:
         model = User
+
 
 class TaskSchema(ma.ModelSchema):
     class Meta:
