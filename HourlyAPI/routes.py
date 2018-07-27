@@ -3,6 +3,7 @@ from HourlyAPI.models import Task, UserSchema, TaskSchema
 from flask import Flask, jsonify, request, abort
 # from sqlalchemy.sql.expression import func
 from sqlalchemy import func
+from datetime import date
 
 task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)
@@ -31,17 +32,21 @@ def create_task():
         abort(400)
     payload = request.get_json(force=True)
 
-    order = db.session.query(db.func.max(Task.order)).scalar()
+    todo_tasks = Task.query.filter(Task.order.isnot(None)).all()
+    print(todo_tasks)
+    if todo_tasks:
+        order = max(task.order for task in todo_tasks)
+    else:
+        order = 0
+    #order = db.session.query(db.func.max(Task.order)).scalar()
     print(order)
     new_order = order + 1
     print(new_order)
 
     new_task = Task()
     new_task.title = payload.get('title')
-    new_task.deadline = payload.get('deadline')
     new_task.notifications = payload.get('notifications')
     new_task.exp = payload.get('exp')
-    new_task.status = payload.get('status')
     new_task.order = new_order
     print(new_task)
 
@@ -90,7 +95,7 @@ def update_task(task_id):
     task_to_update.deadline = payload.get('deadline')
     task_to_update.notifications = payload.get('notifications')
     task_to_update.exp = payload.get('exp')
-    task_to_update.status = payload.get('status')
+    task_to_update.completed = payload.get('status')
 
     print(task_to_update)
     db.session.commit()
@@ -98,6 +103,56 @@ def update_task(task_id):
     result = task_schema.dump(task_to_update)
 
     return jsonify(result)
+
+
+# API call to finish task
+@app.route('/complete_task/<int:task_id>', methods=['PUT'])
+def complete_task(task_id):
+    try:
+        print("Completing...")
+        print(task_id)
+
+        # Query specified task
+        task_completed = Task.query.get(task_id)
+        # Set completed field to true or false based on query string
+        query_bool = request.args.get('completed')
+        print(query_bool)
+        if (query_bool == 'true'):
+            task_completed.completed = True
+            print("here")
+        elif (query_bool == 'false'):
+            task_completed.completed = False
+        else:
+            raise Exception
+            print("Completed not set")
+        # Recalculate todo tasks ordering
+        print("before affected tasks")
+        todo_tasks = Task.query.filter(Task.order.isnot(None)).all()
+        for task in todo_tasks:
+            print(task.order)
+            if task.order > task_completed.order:
+                task.order = task.order - 1
+        #affected_tasks = todo_tasks.query.filter(todo_tasks.order > task_completed.order)
+        print(todo_tasks)
+        task_completed.order = None
+        print("before fin tasks")
+        # Recalculate finished tasks ordering
+        fin_tasks = Task.query.filter(Task.fin_order.isnot(None))
+        #print(fin_tasks)
+        print("after fin tasks")
+        for task in fin_tasks:
+            task.fin_order = task.fin_order + 1
+            print(task)
+        task_completed.fin_order = 0
+        task_completed.fin_date = str(date.today())
+        print(task_completed.fin_date)
+        print(task_completed)
+        db.session.commit()
+        result = task_schema.dump(task_completed)
+        return jsonify(result)
+    except Exception as e:
+        print("Completing error {}".format(e))
+        return "Failed"
 
 
 # Update reorder values using passed id array

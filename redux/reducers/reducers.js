@@ -9,6 +9,9 @@ import {
   DELETE_TASK,
   DELETE_TASK_COMMIT,
   DELETE_TASK_ROLLBACK,
+  COMPLETE_TASK,
+  COMPLETE_TASK_COMMIT,
+  COMPLETE_TASK_ROLLBACK,
   MODIFY_TASK,
   REORDER_TASK,
   REORDER_TASK_COMMIT,
@@ -23,7 +26,8 @@ const tasks = (
     task_list: {
       byId: {},
       allIds: [],
-      prevIds: []
+      prevIds: [],
+      finIds: []
     }
   }, action
 ) => {
@@ -35,18 +39,45 @@ const tasks = (
       }
     case RECEIVE_TASKS:
       // Create object and array
+      console.log(action.payload);
       const tasksById = {};
+      const ids_array = [];
+      const fin_array = [];
       action.payload.map(task => {
         tasksById[task.id] =  task
       })
-      const ids_array = action.payload.map(task => task.id);
+      /*
+      const ids_array = action.payload.map(task => {
+        if (task.completed == null){
+          return task.id;
+        }
+        else { return; }
+      });
+      const fin_array = action.payload.map(task => {
+        if (task.completed != null){
+          return task.id;
+        }
+        else { return; }
+      });
+      */
+      action.payload.forEach(task => {
+        if (task.completed === null){
+          ids_array.push(task.id);
+        }
+        else {
+          fin_array.push(task.id);
+        }
+      })
+      console.log(ids_array);
+      console.log(fin_array);
       return { ...state,
         isFetching: false,
         isStale: false,
         task_list: {
           byId: tasksById,
           allIds: ids_array,
-          prevIds: ids_array
+          prevIds: ids_array,
+          finIds: fin_array
         }
       }
     case CREATE_TASK:
@@ -140,12 +171,34 @@ const tasks = (
           allIds: state.task_list.prevIds
         }
       }
+    case COMPLETE_TASK:
+      console.log("ID: " + action.payload.task_id)
+      console.log("FINIDS: " + state.task_list.finIds)
+      return { ...state,
+        task_list: { ...state.task_list,
+          //byId: del_byId,
+          allIds: [
+            ...state.task_list.allIds.filter(id => id !== action.payload.task_id)
+          ],
+          finIds: [action.payload.task_id, ...state.task_list.finIds]
+        }
+      }
+    case COMPLETE_TASK_COMMIT:
+      console.log("COMMITTING COMPLETE: ");
+      console.log(action.payload);
+      return { ...state,
+        task_list: { ...state.task_list,
+          byId: { ...state.task_list.byId,
+            [action.payload.task_id] : action.payload
+          },
+          prevIds: state.task_list.allIds
+        }
+      }
     // Update corresponding task
     case MODIFY_TASK:
       return { ...state,
         task_list: { ...state.task_list,
-          byId: {
-            ...state.task_list.byId,
+          byId: { ...state.task_list.byId,
             [action.task_id] : action.payload
           }
         }

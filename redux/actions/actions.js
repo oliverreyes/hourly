@@ -8,6 +8,9 @@ export const CREATE_TASK_ROLLBACK = 'CREATE_TASK_ROLLBACK'
 export const DELETE_TASK = 'DELETE_TASK'
 export const DELETE_TASK_COMMIT = 'DELETE_TASK_COMMIT'
 export const DELETE_TASK_ROLLBACK = 'DELETE_TASK_ROLLBACK'
+export const COMPLETE_TASK = 'COMPLETE_TASK'
+export const COMPLETE_TASK_COMMIT = 'COMPLETE_TASK_COMMIT'
+export const COMPLETE_TASK_ROLLBACK = 'COMPLETE_TASK_ROLLBACK'
 export const MODIFY_TASK = 'MODIFY_TASK'
 export const REORDER_TASK = 'REORDER_TASK'
 export const REORDER_TASK_ROLLBACK = 'REORDER_TASK_ROLLBACK'
@@ -61,12 +64,8 @@ export function createTask(input, tempid) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             title: input,
-            deadline: null,
             notifications: false,
-            exp: 5,
-            completed: null,
-            fin_order: null,
-            fin_date: null
+            exp: 5
           }),
         },
         commit: {
@@ -99,6 +98,35 @@ export function deleteTask(task_id) {
         rollback: {
           type: DELETE_TASK_ROLLBACK
         }
+      }
+    }
+  }
+}
+
+/* Complete/Incomplete a task */
+export function completeTask(task_id, bool) {
+  console.log("IN ACTION: "+ bool)
+  console.log(task_id)
+  return {
+    type: COMPLETE_TASK,
+    payload: {
+      task_id,
+      bool
+    },
+    meta: {
+      offline: {
+        effect: {
+          url: 'http://192.168.1.114.xip.io:5000/complete_task/'+task_id+'?completed='+bool,
+          method: 'PUT'
+        },
+        commit: {
+          type: COMPLETE_TASK_COMMIT
+        },
+        /*
+        rollback: {
+          type: COMPLETE_TASK_ROLLBACK
+        }
+        */
       }
     }
   }

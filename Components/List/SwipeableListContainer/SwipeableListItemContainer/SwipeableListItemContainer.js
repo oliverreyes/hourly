@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { PanResponder, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import SwipeableListItem from './ListItem/SwipeableListItem';
-import { deleteTask, reorderTask } from '../../../../redux/actions/actions';
+import { deleteTask, reorderTask, completeTask } from '../../../../redux/actions/actions';
 
 
 /**
@@ -30,6 +30,8 @@ class SwipeableListItemContainer extends Component {
       pan: new Animated.ValueXY(),
     };
     this._deleteTask = this._deleteTask.bind(this);
+    this._completeTask = this._completeTask.bind(this);
+    this._incompleteTask = this._incompleteTask.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
     //this._swipePanResponder = this._swipePanResponder.bind(this);
     this._onReorderPress = this._onReorderPress.bind(this);
@@ -144,6 +146,16 @@ class SwipeableListItemContainer extends Component {
     }
   }
 
+  _completeTask() {
+    console.log("COMPLETE in swipe");
+    this.props.completeTask(this.props.item, 'true');
+  }
+
+  _incompleteTask() {
+    console.log("INCOMPLETE in swipe");
+    this.props.completeTask(this.props.item, 'false');
+  }
+
   render() {
     //console.log(this.props.item);
     //console.log(this.state.task_data);
@@ -152,11 +164,13 @@ class SwipeableListItemContainer extends Component {
               {...this.props}
               panHandlers={this.state.panResponder.panHandlers}
               _deleteTask={this._deleteTask}
+              _completeTask={this._completeTask}
+              _incompleteTask={this._incompleteTask}
               data={this.props.task_data[this.props.item]}
               navigation={this.props.navigation}
               _onLongPress={this._onLongPress}
               pan={this.state.pan}
-              _onReorderPress={this._onReorderPress}/>;
+              _onReorderPress={this._onReorderPress} />;
   }
 }
 
@@ -169,8 +183,8 @@ const mapStateToProps = ({ tasks }) =>
 const bindActionsToDispatch = dispatch =>
 (
   {
-    removeTask : (task_id) => dispatch(removeTask(task_id)),
     deleteTask : (task_id) => dispatch(deleteTask(task_id)),
+    completeTask : (task_id, bool) => dispatch(completeTask(task_id, bool)),
     reorderTask : (id_array, old_pos, new_pos) => dispatch(reorderTask(id_array, old_pos, new_pos))
   }
 );

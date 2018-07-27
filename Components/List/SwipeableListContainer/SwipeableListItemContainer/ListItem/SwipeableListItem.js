@@ -25,6 +25,16 @@ export default class SwipeableListItem extends React.Component {
               color="#841584"
             />
             <Button
+              onPress={this.props._completeTask}
+              title="Complete"
+              color="#841584"
+            />
+            <Button
+              onPress={this.props._incompleteTask}
+              title="Incomplete"
+              color="#841584"
+            />
+            <Button
                 onPress={() => navigate('TaskView', {
                   data: this.props.data
                 }
