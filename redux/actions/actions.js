@@ -122,11 +122,10 @@ export function completeTask(task_id, bool) {
         commit: {
           type: COMPLETE_TASK_COMMIT
         },
-        /*
         rollback: {
-          type: COMPLETE_TASK_ROLLBACK
+          type: COMPLETE_TASK_ROLLBACK,
+          meta: { task_id }
         }
-        */
       }
     }
   }

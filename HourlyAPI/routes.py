@@ -125,24 +125,15 @@ def complete_task(task_id):
         else:
             raise Exception
             print("Completed not set")
-        # Recalculate todo tasks ordering
-        print("before affected tasks")
-        todo_tasks = Task.query.filter(Task.order.isnot(None)).all()
-        for task in todo_tasks:
-            print(task.order)
-            if task.order > task_completed.order:
-                task.order = task.order - 1
-        #affected_tasks = todo_tasks.query.filter(todo_tasks.order > task_completed.order)
-        print(todo_tasks)
+        # Recalculate task ordering
+        affected_tasks = Task.query.filter(Task.order > task_completed.order)
+        for task in affected_tasks:
+            task.order = task.order - 1
         task_completed.order = None
-        print("before fin tasks")
         # Recalculate finished tasks ordering
         fin_tasks = Task.query.filter(Task.fin_order.isnot(None))
-        #print(fin_tasks)
-        print("after fin tasks")
         for task in fin_tasks:
             task.fin_order = task.fin_order + 1
-            print(task)
         task_completed.fin_order = 0
         task_completed.fin_date = str(date.today())
         print(task_completed.fin_date)

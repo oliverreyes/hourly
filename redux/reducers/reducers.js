@@ -46,20 +46,6 @@ const tasks = (
       action.payload.map(task => {
         tasksById[task.id] =  task
       })
-      /*
-      const ids_array = action.payload.map(task => {
-        if (task.completed == null){
-          return task.id;
-        }
-        else { return; }
-      });
-      const fin_array = action.payload.map(task => {
-        if (task.completed != null){
-          return task.id;
-        }
-        else { return; }
-      });
-      */
       action.payload.forEach(task => {
         if (task.completed === null){
           ids_array.push(task.id);
@@ -171,6 +157,9 @@ const tasks = (
           allIds: state.task_list.prevIds
         }
       }
+    /**
+     * Complete task moves task from allIds to finIds
+     */
     case COMPLETE_TASK:
       console.log("ID: " + action.payload.task_id)
       console.log("FINIDS: " + state.task_list.finIds)
@@ -183,6 +172,9 @@ const tasks = (
           finIds: [action.payload.task_id, ...state.task_list.finIds]
         }
       }
+    /**
+     * Complete commit replaces object with payload from DB, saves new history
+     */
     case COMPLETE_TASK_COMMIT:
       console.log("COMMITTING COMPLETE: ");
       console.log(action.payload);
@@ -192,6 +184,18 @@ const tasks = (
             [action.payload.task_id] : action.payload
           },
           prevIds: state.task_list.allIds
+        }
+      }
+    /**
+     * Complete rollback reverts to history and removes task from finIds
+     */
+    case COMPLETE_TASK_ROLLBACK:
+      return { ...state,
+        task_list: { ...state.task_list,
+          allIds: state.task_list.prevIds,
+          finIds: [
+            ...state.task_list.finIds.filter(id => id !== action.meta.task_id)
+          ]
         }
       }
     // Update corresponding task
