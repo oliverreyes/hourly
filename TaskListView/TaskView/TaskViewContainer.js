@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TaskView from './TaskView';
-import { putTask } from '../../redux/actions/actions';
+import { editTask } from '../../redux/actions/actions';
 
 /**
   * Container component
-  * @prop {} 
+  * @prop {}
   * @return
   */
 class TaskViewContainer extends Component {
@@ -17,17 +17,17 @@ class TaskViewContainer extends Component {
       dl: "",
       notif: "",
       exp: "",
-      status: "",
+      //completed: "",
       show_text_input: false,
       modified: false
     };
     this._toggleTextInput = this._toggleTextInput.bind(this);
-    this._modifyTask = this._modifyTask.bind(this);
+    this._editTask = this._editTask.bind(this);
     this._changeTitle = this._changeTitle.bind(this);
     this._changeDl = this._changeDl.bind(this);
     this._changeNotif = this._changeNotif.bind(this);
     this._changeExp = this._changeExp.bind(this);
-    this._changeStatus = this._changeStatus.bind(this);
+    //this._changeCompleted = this._changeCompleted.bind(this);
   }
 
   componentDidMount(){
@@ -42,7 +42,7 @@ class TaskViewContainer extends Component {
       dl: data.deadline,
       notif: data.notifications,
       exp: data.exp,
-      status: data.status
+      completed: data.completed
     });
   }
 
@@ -79,42 +79,44 @@ class TaskViewContainer extends Component {
         modified: true
       });
   }
-
-  _changeStatus(new_input){
+/*
+  _changeCompleted(new_input){
       this.setState({
-        status: new_input,
+        completed: new_input,
         modified: true
       });
   }
-
-  _modifyTask(){
-    this.props.putTask(
-      this.state.id,
-      this.state.title,
-      this.state.dl,
-      this.state.notif,
-      this.state.exp,
-      this.state.status);
+  */
+  _editTask(){
+    const data = {
+      id: this.state.id,
+      title: this.state.title,
+      deadline: this.state.dl,
+      notifications: this.state.notif,
+      exp: this.state.exp,
+      //completed: this.state.completed
+    };
+    this.props.editTask(data);
     this.setState({
       modified: false
     });
   }
 
   render() {
-    return <TaskView {...this.props}
-    _modifyTask={this._modifyTask}
+    return <TaskView /*{...this.props}*/
+    _editTask={this._editTask}
     _toggleTextInput={() => this._toggleTextInput()}
     show_text_input={this.state.show_text_input}
     _changeTitle={(title) => this._changeTitle(title)}
     _changeDl={(dl) => this._changeDl(dl)}
     _changeNotif={(notif) => this._changeNotif(notif)}
     _changeExp={(exp) => this._changeExp(exp)}
-    _changeStatus={(status) => this._changeStatus(status)}
+    //_changeCompleted={(status) => this._changeCompleted(status)}
     title={this.state.title}
     dl={this.state.dl}
     exp={this.state.exp}
     notif={this.state.notif}
-    status={this.state.status}
+    //completed={this.state.completed}
     modified={this.state.modified} />;
   }
 }
@@ -123,12 +125,8 @@ const mapStateToProps = tasks => {
   return { tasks }
 };
 
-const bindActionsToDispatch = dispatch =>
-(
-  {
-    putTask : (task_id, input_title, input_dl, input_notif, input_repeat, input_notes ) =>
-    dispatch(putTask(task_id, input_title, input_dl, input_notif, input_repeat, input_notes))
-  }
-);
+const bindActionsToDispatch = dispatch => ({
+  editTask : (data) => dispatch(editTask(data))
+});
 
 export default TaskViewContainer = connect(mapStateToProps, bindActionsToDispatch)(TaskViewContainer);

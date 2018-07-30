@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { PanResponder, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import SwipeableListItem from './ListItem/SwipeableListItem';
-import { removeTask, reorderTask, shuffleTask } from '../../../../redux/actions/actions';
+import { deleteTask, reorderTask, completeTask } from '../../../../redux/actions/actions';
 
 
 /**
@@ -30,6 +30,8 @@ class SwipeableListItemContainer extends Component {
       pan: new Animated.ValueXY(),
     };
     this._deleteTask = this._deleteTask.bind(this);
+    this._completeTask = this._completeTask.bind(this);
+    this._incompleteTask = this._incompleteTask.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
     //this._swipePanResponder = this._swipePanResponder.bind(this);
     this._onReorderPress = this._onReorderPress.bind(this);
@@ -50,20 +52,16 @@ class SwipeableListItemContainer extends Component {
     if (this.props.reorder_toggle){
       console.log("NEW INDEX: " + this_index);
       console.log("OLD INDEX: " + this.props.old_index);
-      if (this.props.old_index !== this_index && (this.props.old_index+1 !== this_index)){
+      if (this.props.old_index !== this_index){
 
         /* Set to null and toggle reorder back */
         //this.props._updateReorderIdx(null);
         //this.props._toggleReorder();
-        this.props.shuffleTask(this.props.task_array, this.props.old_index, this_index);
+
+        //this.props.shuffleTask(this.props.task_array, this.props.old_index, this_index);
+        this.props.reorderTask(this.props.task_array, this.props.old_index, this_index);
       }
       this.props._toggleReorder();
-      /*
-      else {
-        this.props._updateReorderIdx(null);
-        this.props._toggleReorder();
-      }
-      */
     }
   }
   /**
@@ -140,25 +138,47 @@ class SwipeableListItemContainer extends Component {
   /*
 
   /**
-   * Deletes task based on id. Calls removeTask using props from actions.js.
+   * Deletes task based on id.
    */
   _deleteTask() {
-    this.props.removeTask(this.props.item);
+    if (!this.props.task_data[this.props.item].isTemp){
+      this.props.deleteTask(this.props.item);
+    }
+  }
+  /**
+   * Completes task by id.
+   */
+  _completeTask() {
+    if (!this.props.task_data[this.props.item].isTemp){
+      console.log("COMPLETE in swipe");
+      this.props.completeTask(this.props.item, 'true');
+    }
+  }
+  /**
+   * Marks task as incomplete.
+   */
+  _incompleteTask() {
+    if (!this.props.task_data[this.props.item].isTemp){
+      console.log("INCOMPLETE in swipe");
+      this.props.completeTask(this.props.item, 'false');
+    }
   }
 
   render() {
     //console.log(this.props.item);
     //console.log(this.state.task_data);
-    //console.log(task_data);
+    console.log(this.props.task_data);
     return <SwipeableListItem
               {...this.props}
               panHandlers={this.state.panResponder.panHandlers}
-              _deleteTask={this._deleteTask} 
+              _deleteTask={this._deleteTask}
+              _completeTask={this._completeTask}
+              _incompleteTask={this._incompleteTask}
               data={this.props.task_data[this.props.item]}
               navigation={this.props.navigation}
               _onLongPress={this._onLongPress}
               pan={this.state.pan}
-              _onReorderPress={this._onReorderPress}/>;
+              _onReorderPress={this._onReorderPress} />;
   }
 }
 
@@ -171,8 +191,9 @@ const mapStateToProps = ({ tasks }) =>
 const bindActionsToDispatch = dispatch =>
 (
   {
-    removeTask : (task_id) => dispatch(removeTask(task_id)),
-    shuffleTask : (id_array, old_pos, new_pos) => dispatch(shuffleTask(id_array, old_pos, new_pos))
+    deleteTask : (task_id) => dispatch(deleteTask(task_id)),
+    completeTask : (task_id, bool) => dispatch(completeTask(task_id, bool)),
+    reorderTask : (id_array, old_pos, new_pos) => dispatch(reorderTask(id_array, old_pos, new_pos))
   }
 );
 

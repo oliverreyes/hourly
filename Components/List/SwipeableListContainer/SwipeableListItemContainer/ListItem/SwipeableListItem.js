@@ -25,6 +25,16 @@ export default class SwipeableListItem extends React.Component {
               color="#841584"
             />
             <Button
+              onPress={this.props._completeTask}
+              title="Complete"
+              color="#841584"
+            />
+            <Button
+              onPress={this.props._incompleteTask}
+              title="Incomplete"
+              color="#841584"
+            />
+            <Button
                 onPress={() => navigate('TaskView', {
                   data: this.props.data
                 }
@@ -45,7 +55,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     flex: 1,
     backgroundColor: 'white',
-    height: 150
+    height: 250
   },
   list_text: {
     fontSize: 28,
