@@ -12,7 +12,9 @@ import {
   COMPLETE_TASK,
   COMPLETE_TASK_COMMIT,
   COMPLETE_TASK_ROLLBACK,
-  MODIFY_TASK,
+  EDIT_TASK,
+  EDIT_TASK_COMMIT,
+  EDIT_TASK_ROLLBACK,
   REORDER_TASK,
   REORDER_TASK_COMMIT,
   REORDER_TASK_ROLLBACK
@@ -198,12 +200,46 @@ const tasks = (
           ]
         }
       }
-    // Update corresponding task
-    case MODIFY_TASK:
+    /**
+     * Edit title, deadline date, notifications, or priority of corresponding task.
+     */
+    case EDIT_TASK:
+      console.log(action.payload);
       return { ...state,
         task_list: { ...state.task_list,
           byId: { ...state.task_list.byId,
-            [action.task_id] : action.payload
+            [action.payload.id] : { ...state.task_list.byId[action.payload.id],
+              title: action.payload.title,
+              deadline: action.payload.deadline,
+              notifications: action.payload.notifications,
+              exp: action.payload.exp
+            },
+            ["prev"+action.payload.id] : state.task_list.byId[action.payload.id]
+          }
+        }
+      }
+    /**
+     * Remove previous contents of task.
+     */
+    case EDIT_TASK_COMMIT:
+      const edited_state_c = state.task_list.byId;
+      const { ["prev"+action.meta.id] : prev_val_c, ...edited_byId_c } = edited_state_c;
+      console.log("COMMITTED");
+      return { ...state,
+        task_list: { ...state.task_list,
+          byId: edited_byId_c
+        }
+      }
+    /**
+     * Replace new content with previous task content and remove previous content value.
+     */
+    case EDIT_TASK_ROLLBACK:
+      const edited_state_rb = state.task_list.byId;
+      const { ["prev"+action.meta.id] : prev_val_rb, ...edited_byId_rb } = edited_state_rb;
+      return { ...state,
+        task_list: { ...state.task_list,
+          byId: { ...edited_byId_rb,
+            [action.meta.id] : prev_val_rb
           }
         }
       }

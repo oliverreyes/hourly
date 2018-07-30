@@ -2,7 +2,7 @@ from HourlyAPI import app, db
 from HourlyAPI.models import Task, UserSchema, TaskSchema
 from flask import Flask, jsonify, request, abort
 # from sqlalchemy.sql.expression import func
-from sqlalchemy import func
+#from sqlalchemy import func
 from datetime import date
 
 task_schema = TaskSchema()
@@ -95,7 +95,7 @@ def update_task(task_id):
     task_to_update.deadline = payload.get('deadline')
     task_to_update.notifications = payload.get('notifications')
     task_to_update.exp = payload.get('exp')
-    task_to_update.completed = payload.get('status')
+    #task_to_update.completed = payload.get('status')
 
     print(task_to_update)
     db.session.commit()

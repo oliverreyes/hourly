@@ -58,28 +58,15 @@ export default class TaskView extends React.Component {
             { this.props.show_text_input ? <TextInput
               style={styles.input_text}
               //onChangeText={this.props._changeRepeat}
-              value={this.props.exp}
+              value={"5"}
               onSubmitEditing={this.props._toggleTextInput}
-              /> : <Text style={styles.text}>Priority - {this.props.exp}</Text>
-            }
-          </TouchableOpacity>
-        </View>
-        <View style={styles.input_container}>
-          <TouchableOpacity
-            style={styles.input_button}
-            onPress={this.props._toggleTextInput}>
-            { this.props.show_text_input ? <TextInput
-              style={styles.input_text}
-              onChangeText={this.props._changeStatus}
-              value={this.props.status}
-              onSubmitEditing={this.props._toggleTextInput}
-              /> : <Text style={styles.text}>Status- {this.props.status}</Text>
+              /> : <Text style={styles.text}>Priority - 5</Text>
             }
           </TouchableOpacity>
         </View>
         { !this.props.show_text_input && this.props.modified ? <TouchableOpacity
           style={styles.input_button}
-          onPress={this.props._modifyTask}>
+          onPress={this.props._editTask}>
           <Text>Save</Text>
           </TouchableOpacity>
           : null
@@ -88,6 +75,22 @@ export default class TaskView extends React.Component {
     );
   }
 }
+
+/*
+<View style={styles.input_container}>
+  <TouchableOpacity
+    style={styles.input_button}
+    onPress={this.props._toggleTextInput}>
+    { this.props.show_text_input ? <TextInput
+      style={styles.input_text}
+      onChangeText={this.props._changeStatus}
+      value={this.props.status}
+      onSubmitEditing={this.props._toggleTextInput}
+      /> : <Text style={styles.text}>Status- {this.props.completed}</Text>
+    }
+  </TouchableOpacity>
+</View>
+*/
 
 const styles = StyleSheet.create({
   container: {

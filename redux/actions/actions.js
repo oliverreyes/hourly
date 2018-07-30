@@ -11,7 +11,9 @@ export const DELETE_TASK_ROLLBACK = 'DELETE_TASK_ROLLBACK'
 export const COMPLETE_TASK = 'COMPLETE_TASK'
 export const COMPLETE_TASK_COMMIT = 'COMPLETE_TASK_COMMIT'
 export const COMPLETE_TASK_ROLLBACK = 'COMPLETE_TASK_ROLLBACK'
-export const MODIFY_TASK = 'MODIFY_TASK'
+export const EDIT_TASK = 'EDIT_TASK'
+export const EDIT_TASK_COMMIT = 'EDIT_TASK_COMMIT'
+export const EDIT_TASK_ROLLBACK = 'EDIT_TASK_ROLLBACK'
 export const REORDER_TASK = 'REORDER_TASK'
 export const REORDER_TASK_ROLLBACK = 'REORDER_TASK_ROLLBACK'
 export const REORDER_TASK_COMMIT = 'REORDER_TASK_COMMIT'
@@ -132,11 +134,40 @@ export function completeTask(task_id, bool) {
 }
 
 /* Modify a task from store */
-export function modifyTask(task_id, content) {
+export function editTask(data) {
+  console.log(data);
   return {
-    type: MODIFY_TASK,
-    payload: content,
-    task_id
+    type: EDIT_TASK,
+    payload: {
+      id: data.id,
+      title: data.title,
+      deadline: data.deadline,
+      notifications: data.notifications,
+      exp: data.exp
+    },
+    meta: {
+      offline: {
+        effect: {
+          url: 'http://192.168.1.114.xip.io:5000/update_task/'+data.id,
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: data.title,
+            deadline: data.deadline,
+            notifications: data.notifications,
+            exp: data.exp
+          }),
+        },
+        commit: {
+          type: EDIT_TASK_COMMIT,
+          meta: { id: data.id }
+        },
+        rollback: {
+          type: EDIT_TASK_ROLLBACK,
+          meta: { id: data.id }
+        }
+      }
+    }
   }
 }
 
@@ -188,56 +219,6 @@ export function fetchTasks() {
       console.log(response_json);
       // Dispatch action
       let receive_json = await dispatch(receiveTasks(response_json));
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-}
-/*
-export function removeTask(task_id) {
-  console.log(task_id);
-  return async (dispatch) => {
-    try {
-      console.log("REMOVING");
-      let response = await fetch(
-        'http://192.168.1.114.xip.io:5000/delete_task/'+task_id, {
-          method: 'DELETE'
-        });
-      let response_json = await response.json();
-      console.log(response_json);
-      let deleted_id = await dispatch(deleteTask(task_id));
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-}
-*/
-
-export function putTask(task_id, input_title, input_dl, input_notif, input_exp, input_status, input_order ) {
-  console.log(task_id);
-  return async (dispatch) => {
-    try {
-      console.log("UPDATING");
-      let response = await fetch(
-        'http://192.168.1.114.xip.io:5000/update_task/'+task_id, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            title: input_title,
-            deadline: input_dl,
-            notifications: input_notif,
-            exp: input_exp,
-            status: input_status
-          }),
-        });
-      let response_json = await response.json();
-      console.log(response_json[0]);
-      let modded_task = await dispatch(modifyTask(task_id, response_json[0]));
-      console.log(modded_task);
 
     } catch (error) {
       console.error(error);

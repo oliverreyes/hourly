@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     flex: 1,
     backgroundColor: 'white',
-    height: 150
+    height: 250
   },
   list_text: {
     fontSize: 28,
