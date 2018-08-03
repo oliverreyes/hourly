@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, TextInput, TouchableOpacity, DatePickerIOS } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TextInput, TouchableOpacity, DatePickerIOS, Switch, ActionSheetIOS } from 'react-native';
 
 /**
   * Presentational component
@@ -43,68 +43,41 @@ export default class TaskView extends React.Component {
           minimumDate={this.props.today} /> : null
         }
         <View style={styles.row_container}>
-          <TouchableOpacity
-            style={styles.input_button}
-            onPress={this.props._toggleTextInput}>
-            {
-              this.props.show_input ? <TextInput
-              style={styles.input_text}
-              //onChangeText={this.props._changeNotif}
-              value={this.props.notif ? "On" : "Off"}
-              onSubmitEditing={this.props._toggleTextInput}
-              /> : <Text style={styles.text}>Notifications - {this.props.notif ? "On" : "Off"}</Text>
-            }
-            </TouchableOpacity>
+          <Text style={styles.text}>Notifications</Text>
+          <Switch
+            style={{marginRight: 10}}
+            value={this.props.notif}
+            onValueChange={this.props._setNotif}
+            onTintColor='#FD4F57'
+            tintColor='#FFFFFF'
+          ></Switch>
         </View>
         <View style={styles.row_container}>
-          <TouchableOpacity
-            style={styles.input_button}
-            onPress={this.props._toggleTextInput}>
-            { this.props.show_input ? <TextInput
-              style={styles.input_text}
-              //onChangeText={this.props._changeRepeat}
-              value={"5"}
-              onSubmitEditing={this.props._toggleTextInput}
-              /> : <Text style={styles.text}>Priority - 5</Text>
-            }
-          </TouchableOpacity>
+          <Text style={styles.text}>Priority</Text>
+          <ActionSheetIOS></ActionSheetIOS>
         </View>
-
+        <View style={[styles.row_container, {justifyContent: 'center'}]}>
         { !this.props.show_input && this.props.modified ? <TouchableOpacity
-          style={styles.input_button}
           onPress={this.props._editTask}>
-          <Text>Save</Text>
+          <Text style={[styles.text, {fontWeight: 'bold'}]}>Save</Text>
           </TouchableOpacity>
-          : null
+          : <TouchableOpacity
+            onPress={this.props._deleteTask}>
+            <Text style={[styles.text, {fontWeight: 'bold', color: '#FD4F57'}]}>Delete</Text>
+            </TouchableOpacity>
         }
+        </View>
       </View>
     );
   }
 }
-
-/*
-<View style={styles.input_container}>
-  <TouchableOpacity
-    style={styles.input_button}
-    onPress={this.props._toggleTextInput}>
-    { this.props.show_input ? <TextInput
-      style={styles.input_text}
-      onChangeText={this.props._changeStatus}
-      value={this.props.status}
-      onSubmitEditing={this.props._toggleTextInput}
-      /> : <Text style={styles.text}>Status- {this.props.completed}</Text>
-    }
-  </TouchableOpacity>
-</View>
-*/
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'flex-start',
-    backgroundColor: '#FFB000',
-    //alignSelf: 'stretch'
+    backgroundColor: '#FFB000'
   },
   row_container: {
     flex: 1,
@@ -124,7 +97,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 10,
     marginRight: 10,
-    //color: '#212121',
     color: '#FFFFFF'
   },
   input_header: {
@@ -146,7 +118,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     height: 100
   },
-
   input_text: {
     overflow: 'scroll'
   }

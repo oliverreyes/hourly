@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import DatePickerIOS from 'react-native';
 import { connect } from 'react-redux';
 import TaskView from './TaskView';
-import { editTask } from '../../redux/actions/actions';
+import { deleteTask, editTask } from '../../redux/actions/actions';
 import moment from 'moment';
 
 /**
@@ -17,7 +16,7 @@ class TaskViewContainer extends Component {
       id: "",
       title: "",
       dl: "",
-      notif: "",
+      notif: false,
       exp: "",
       show_input: false,
       show_picker: false,
@@ -25,12 +24,13 @@ class TaskViewContainer extends Component {
       new_dl: new Date(),
       today: ''
     };
+    this._editTask = this._editTask.bind(this);
+    this._deleteTask = this._deleteTask.bind(this);
     this._toggleTextInput = this._toggleTextInput.bind(this);
     this._togglePicker = this._togglePicker.bind(this);
-    this._editTask = this._editTask.bind(this);
     this._changeTitle = this._changeTitle.bind(this);
     //this._changeDl = this._changeDl.bind(this);
-    this._changeNotif = this._changeNotif.bind(this);
+    this._setNotif = this._setNotif.bind(this);
     this._changeExp = this._changeExp.bind(this);
     this._setDeadline = this._setDeadline.bind(this);
     //this._changeCompleted = this._changeCompleted.bind(this);
@@ -82,9 +82,9 @@ class TaskViewContainer extends Component {
       });
   }
 
-  _changeNotif(new_input){
+  _setNotif(bool){
       this.setState({
-        notif: new_input,
+        notif: bool,
         modified: true
       });
   }
@@ -110,6 +110,15 @@ class TaskViewContainer extends Component {
       modified: true,
       //show_picker: false
     });
+  }
+  /**
+   * Deletes task based on id and shifts view back to list.
+   */
+  _deleteTask() {
+    if (!this.props.task_data[this.state.id].isTemp){
+      this.props.deleteTask(this.state.id);
+      this.props.navigation.goBack();
+    }
   }
 
   _editTask(){
@@ -141,13 +150,14 @@ class TaskViewContainer extends Component {
   render() {
     return <TaskView /*{...this.props}*/
     _editTask={this._editTask}
+    _deleteTask={this._deleteTask}
     _toggleTextInput={() => this._toggleTextInput()}
     show_input={this.state.show_input}
     _togglePicker={() => this._togglePicker()}
     show_picker={this.state.show_picker}
     _changeTitle={(title) => this._changeTitle(title)}
     _setDeadline={(new_dl) => this._setDeadline(new_dl)}
-    _changeNotif={(notif) => this._changeNotif(notif)}
+    _setNotif={(notif) => this._setNotif(notif)}
     _changeExp={(exp) => this._changeExp(exp)}
     //_changeCompleted={(status) => this._changeCompleted(status)}
     title={this.state.title}
@@ -161,12 +171,14 @@ class TaskViewContainer extends Component {
   }
 }
 
-const mapStateToProps = tasks => {
-  return { tasks }
-};
+const mapStateToProps = ({ tasks }) =>
+  ({
+    task_data: tasks.task_list.byId
+  });
 
 const bindActionsToDispatch = dispatch => ({
-  editTask : (data) => dispatch(editTask(data))
+  editTask : (data) => dispatch(editTask(data)),
+  deleteTask : (task_id) => dispatch(deleteTask(task_id))
 });
 
 export default TaskViewContainer = connect(mapStateToProps, bindActionsToDispatch)(TaskViewContainer);

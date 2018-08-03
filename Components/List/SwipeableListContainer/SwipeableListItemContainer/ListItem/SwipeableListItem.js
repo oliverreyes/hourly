@@ -20,11 +20,6 @@ export default class SwipeableListItem extends React.Component {
           <View >
             <Text style={styles.list_text}>{title}</Text>
             <Button
-              onPress={this.props._deleteTask}
-              title="Delete"
-              color="#841584"
-            />
-            <Button
               onPress={this.props._completeTask}
               title="Complete"
               color="#841584"
