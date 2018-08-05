@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ActionSheetIOS } from 'react-native';
 import { connect } from 'react-redux';
 import TaskView from './TaskView';
 import { deleteTask, editTask } from '../../redux/actions/actions';
@@ -13,11 +14,12 @@ class TaskViewContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: "",
-      title: "",
-      dl: "",
+      id: '',
+      title: '',
+      dl: '',
       notif: false,
-      exp: "",
+      exp: '',
+      priority: '',
       show_input: false,
       show_picker: false,
       modified: false,
@@ -31,17 +33,15 @@ class TaskViewContainer extends Component {
     this._changeTitle = this._changeTitle.bind(this);
     //this._changeDl = this._changeDl.bind(this);
     this._setNotif = this._setNotif.bind(this);
-    this._changeExp = this._changeExp.bind(this);
+    this._setExp = this._setExp.bind(this);
     this._setDeadline = this._setDeadline.bind(this);
     //this._changeCompleted = this._changeCompleted.bind(this);
   }
 
   componentDidMount(){
-    //const this_task = this.props.tasks.tasks.task_list.find(x => x.id === this.props.navigation.state.params.id)
-    //console.log(this_task);
     const {data} = this.props.navigation.state.params;
     let deadline = data.deadline;
-    console.log(deadline);
+    let priority = null;
     if (data.deadline === null){
       deadline = 'None';
     }
@@ -50,7 +50,15 @@ class TaskViewContainer extends Component {
       deadline = moment(deadline,'YYYY-MM-DD').format('ddd MMM DD YYYY');
     }
     console.log(deadline);
-
+    if (data.exp === 5){
+      priority = 'Low';
+    }
+    else if (data.exp === 10){
+      priority = 'Medium';
+    }
+    else {
+      priority = 'High';
+    }
     // On mount, find object in redux array using passed id and update component state with data
     this.setState({
       id: data.id,
@@ -58,6 +66,7 @@ class TaskViewContainer extends Component {
       dl: deadline,
       notif: data.notifications,
       exp: data.exp,
+      priority: priority,
       today: new Date()
     });
   }
@@ -89,20 +98,37 @@ class TaskViewContainer extends Component {
       });
   }
 
-  _changeExp(new_input){
-      this.setState({
-        exp: new_input,
-        modified: true
-      });
+  _setExp(){
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: ['Low', 'Medium', 'High', 'Cancel'],
+      cancelButtonIndex: 3
+    },
+    (btnIndex) => {
+      if (btnIndex === 0){
+        this.setState({
+          exp: 5,
+          priority: 'Low',
+          modified: true
+        });
+      }
+      else if (btnIndex === 1){
+        this.setState({
+          exp: 10,
+          priority: 'Medium',
+          modified: true
+        });
+      }
+      else if (btnIndex === 2){
+        this.setState({
+          exp: 15,
+          priority: 'High',
+          modified: true
+        });
+      }
+    }
+    );
   }
-/*
-  _changeCompleted(new_input){
-      this.setState({
-        completed: new_input,
-        modified: true
-      });
-  }
-  */
+
   _setDeadline(newDate){
     console.log(newDate);
     this.setState({
@@ -158,16 +184,14 @@ class TaskViewContainer extends Component {
     _changeTitle={(title) => this._changeTitle(title)}
     _setDeadline={(new_dl) => this._setDeadline(new_dl)}
     _setNotif={(notif) => this._setNotif(notif)}
-    _changeExp={(exp) => this._changeExp(exp)}
-    //_changeCompleted={(status) => this._changeCompleted(status)}
+    _setExp={this._setExp}
     title={this.state.title}
     dl={this.state.dl}
     new_dl={this.state.new_dl}
-    exp={this.state.exp}
     notif={this.state.notif}
-    //completed={this.state.completed}
     modified={this.state.modified}
-    today={this.state.today} />;
+    today={this.state.today}
+    priority={this.state.priority} />;
   }
 }
 

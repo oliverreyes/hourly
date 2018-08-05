@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, TextInput, TouchableOpacity, DatePickerIOS, Switch, ActionSheetIOS } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TextInput, TouchableOpacity, DatePickerIOS, Switch } from 'react-native';
 
 /**
   * Presentational component
@@ -54,7 +54,9 @@ export default class TaskView extends React.Component {
         </View>
         <View style={styles.row_container}>
           <Text style={styles.text}>Priority</Text>
-          <ActionSheetIOS></ActionSheetIOS>
+          <TouchableOpacity onPress={this.props._setExp}>
+            <Text style={styles.text}>{this.props.priority}</Text>
+          </TouchableOpacity>
         </View>
         <View style={[styles.row_container, {justifyContent: 'center'}]}>
         { !this.props.show_input && this.props.modified ? <TouchableOpacity
