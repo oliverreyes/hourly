@@ -2,9 +2,26 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, TextInput, TouchableOpacity, DatePickerIOS, Switch } from 'react-native';
 
 /**
-  * Presentational component
-  * @prop {}
-  * @return
+  * Presentational component for task & task options.
+  * @prop {func} _editTask call to save task modifications to DB
+  * @prop {func} _deleteTask call to remove task
+  * @prop {func} _toggleTextInput call to toggle text input
+  * @prop {func} _togglePicker call to toggle datepicker
+  * @prop {func} _changeTitle call to save modified title
+  * @prop {func} __setDeadline call to save modified deadline setting
+  * @prop {func} _setNotif call to save modifed notification setting
+  * @prop {func} _setExp call to save modified priority setting
+  * @prop {bool} show_input flag to show/hide text input
+  * @prop {bool} show_picker flag to show/hide datepicker
+  * @prop {bool} modified flag to show if task has pending changes
+  * @prop {string} title task title
+  * @prop {string} dl task deadline
+  * @prop {string} new_dl task updated deadline
+  * @prop {string} notif task notification setting
+  * @prop {string} dl task deadline text
+  * @prop {string} priority task priority setting
+  * @prop {obj} today today's date
+  * @return View components for each task setting
   */
 export default class TaskView extends React.Component {
   render() {
@@ -86,8 +103,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    //borderBottomColor: '#BDBDBD',
-    //borderBottomWidth: 0.3,
     shadowOffset: { width: 0, height: -0.1 },
     shadowColor: 'black',
     shadowOpacity: 0.25,
@@ -102,8 +117,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF'
   },
   input_header: {
-    overflow: 'scroll',
-    //backgroundColor: 'rgb(0,0,0,0.3)'
+    overflow: 'scroll'
   },
   text: {
     fontSize: 18,

@@ -56,8 +56,8 @@ const tasks = (
           fin_array.push(task.id);
         }
       })
-      console.log(ids_array);
-      console.log(fin_array);
+      //console.log(ids_array);
+      //console.log(fin_array);
       return { ...state,
         isFetching: false,
         isStale: false,

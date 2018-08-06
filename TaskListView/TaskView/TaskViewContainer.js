@@ -6,9 +6,20 @@ import { deleteTask, editTask } from '../../redux/actions/actions';
 import moment from 'moment';
 
 /**
-  * Container component
-  * @prop {}
-  * @return
+  * Container component holds state data for individual tasks.
+  * @prop {obj} this.props.navigation.state.params.data task data
+  * @state {string} id task id
+  * @state {string} title task title
+  * @state {string} dl deadline in text form
+  * @state {string} priority priority text display
+  * @state {integer} exp experience points
+  * @state {bool} notif notifications flag
+  * @state {bool} show_input flag to show text input
+  * @state {bool} show_picker flag to display date picker
+  * @state {bool} modified flag to display modified state - shows 'Save'
+  * @state {obj} new_dl new deadline chosen by user
+  * @state {obj} today today's date to set minumum user can choose
+  * @return TaskView presentation component
   */
 class TaskViewContainer extends Component {
   constructor(props) {
@@ -18,7 +29,7 @@ class TaskViewContainer extends Component {
       title: '',
       dl: '',
       notif: false,
-      exp: '',
+      exp: null,
       priority: '',
       show_input: false,
       show_picker: false,
@@ -31,13 +42,14 @@ class TaskViewContainer extends Component {
     this._toggleTextInput = this._toggleTextInput.bind(this);
     this._togglePicker = this._togglePicker.bind(this);
     this._changeTitle = this._changeTitle.bind(this);
-    //this._changeDl = this._changeDl.bind(this);
     this._setNotif = this._setNotif.bind(this);
     this._setExp = this._setExp.bind(this);
     this._setDeadline = this._setDeadline.bind(this);
-    //this._changeCompleted = this._changeCompleted.bind(this);
   }
-
+  /**
+   * On mount, find object in redux array using passed id and update component state with data.
+   * Format deadline and priority for proper display.
+   */
   componentDidMount(){
     const {data} = this.props.navigation.state.params;
     let deadline = data.deadline;
@@ -49,7 +61,6 @@ class TaskViewContainer extends Component {
       deadline = deadline.toString().slice(0,10);
       deadline = moment(deadline,'YYYY-MM-DD').format('ddd MMM DD YYYY');
     }
-    console.log(deadline);
     if (data.exp === 5){
       priority = 'Low';
     }
@@ -59,7 +70,6 @@ class TaskViewContainer extends Component {
     else {
       priority = 'High';
     }
-    // On mount, find object in redux array using passed id and update component state with data
     this.setState({
       id: data.id,
       title: data.title,
@@ -70,34 +80,33 @@ class TaskViewContainer extends Component {
       today: new Date()
     });
   }
-
+  /* Toggles text input on or off. */
   _toggleTextInput(){
     this.setState(prevState => ({
       show_input: !prevState.show_input
     }));
   }
-
+  /* Toggles datepicker display on or off. */
   _togglePicker(){
-    console.log("SHOW PICKER " + this.state.show_picker);
     this.setState(prevState => ({
       show_picker: !prevState.show_picker
     }));
   }
-
+  /* Sets new task title based on user input. */
   _changeTitle(new_input){
       this.setState({
         title: new_input,
         modified: true
       });
   }
-
+  /* Sets new notification status based on switch. */
   _setNotif(bool){
       this.setState({
         notif: bool,
         modified: true
       });
   }
-
+  /* Sets new priority & experience based on option picked. */
   _setExp(){
     ActionSheetIOS.showActionSheetWithOptions({
       options: ['Low', 'Medium', 'High', 'Cancel'],
@@ -128,33 +137,28 @@ class TaskViewContainer extends Component {
     }
     );
   }
-
+  /* Saves new deadline as date chosen on datepicker. */
   _setDeadline(newDate){
-    console.log(newDate);
     this.setState({
       new_dl: newDate,
-      modified: true,
-      //show_picker: false
+      modified: true
     });
   }
-  /**
-   * Deletes task based on id and shifts view back to list.
-   */
+  /* Deletes task based on id and shifts view back to list. */
   _deleteTask() {
     if (!this.props.task_data[this.state.id].isTemp){
       this.props.deleteTask(this.state.id);
       this.props.navigation.goBack();
     }
   }
-
+  /* Saves pending task changes to database. */
   _editTask(){
     let data = {
       id: this.state.id,
       title: this.state.title,
       deadline: this.state.dl,
       notifications: this.state.notif,
-      exp: this.state.exp,
-      //completed: this.state.completed
+      exp: this.state.exp
     };
     if (this.state.show_picker){
       const stringDate = this.state.new_dl.toString().substr(0,15);
@@ -174,12 +178,12 @@ class TaskViewContainer extends Component {
   }
 
   render() {
-    return <TaskView /*{...this.props}*/
+    return <TaskView
     _editTask={this._editTask}
     _deleteTask={this._deleteTask}
-    _toggleTextInput={() => this._toggleTextInput()}
+    _toggleTextInput={this._toggleTextInput}
     show_input={this.state.show_input}
-    _togglePicker={() => this._togglePicker()}
+    _togglePicker={this._togglePicker}
     show_picker={this.state.show_picker}
     _changeTitle={(title) => this._changeTitle(title)}
     _setDeadline={(new_dl) => this._setDeadline(new_dl)}
@@ -196,9 +200,7 @@ class TaskViewContainer extends Component {
 }
 
 const mapStateToProps = ({ tasks }) =>
-  ({
-    task_data: tasks.task_list.byId
-  });
+  ({ task_data: tasks.task_list.byId });
 
 const bindActionsToDispatch = dispatch => ({
   editTask : (data) => dispatch(editTask(data)),
