@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { PanResponder, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import SwipeableListItem from './ListItem/SwipeableListItem';
-import { deleteTask, reorderTask, completeTask } from '../../../../redux/actions/actions';
+import { reorderTask, completeTask } from '../../../../redux/actions/actions';
 
 
 /**
@@ -29,7 +29,6 @@ class SwipeableListItemContainer extends Component {
       panResponder: "",
       pan: new Animated.ValueXY(),
     };
-    this._deleteTask = this._deleteTask.bind(this);
     this._completeTask = this._completeTask.bind(this);
     this._incompleteTask = this._incompleteTask.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
@@ -138,14 +137,6 @@ class SwipeableListItemContainer extends Component {
   /*
 
   /**
-   * Deletes task based on id.
-   */
-  _deleteTask() {
-    if (!this.props.task_data[this.props.item].isTemp){
-      this.props.deleteTask(this.props.item);
-    }
-  }
-  /**
    * Completes task by id.
    */
   _completeTask() {
@@ -171,7 +162,6 @@ class SwipeableListItemContainer extends Component {
     return <SwipeableListItem
               {...this.props}
               panHandlers={this.state.panResponder.panHandlers}
-              _deleteTask={this._deleteTask}
               _completeTask={this._completeTask}
               _incompleteTask={this._incompleteTask}
               data={this.props.task_data[this.props.item]}
@@ -191,7 +181,6 @@ const mapStateToProps = ({ tasks }) =>
 const bindActionsToDispatch = dispatch =>
 (
   {
-    deleteTask : (task_id) => dispatch(deleteTask(task_id)),
     completeTask : (task_id, bool) => dispatch(completeTask(task_id, bool)),
     reorderTask : (id_array, old_pos, new_pos) => dispatch(reorderTask(id_array, old_pos, new_pos))
   }

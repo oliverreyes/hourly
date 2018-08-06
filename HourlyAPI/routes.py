@@ -3,7 +3,7 @@ from HourlyAPI.models import Task, UserSchema, TaskSchema
 from flask import Flask, jsonify, request, abort
 # from sqlalchemy.sql.expression import func
 #from sqlalchemy import func
-from datetime import date
+from datetime import date, datetime
 
 task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)
@@ -87,6 +87,7 @@ def update_task(task_id):
 
     # Get payload
     payload = request.get_json(force=True)
+    print(payload.get('deadline'))
 
     # Query specified task
     task_to_update = Task.query.get(task_id)
