@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 /**
   * Presentational component
@@ -8,7 +8,16 @@ import { View } from 'react-native';
 export default class Separator extends React.Component {
   render() {
     return (
-      <View style={{ height: 0.5, alignSelf: 'stretch', backgroundColor: '#DCDCDC' }}></View>
+      <View style={styles.separator}></View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  separator: {
+    alignSelf: 'stretch',
+    height: 0.5,
+    backgroundColor: '#FFECB3',
+    marginHorizontal: 10
+  }
+});

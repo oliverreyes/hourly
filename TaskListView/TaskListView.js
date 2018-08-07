@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, KeyboardAvoidingView } from 'react-native';
 import SwipeableListContainer from '../Components/List/SwipeableListContainer/SwipeableListContainer';
 import {
   fetchTasks,
@@ -23,12 +23,12 @@ class TaskListView extends Component {
   render() {
     console.log(this.props.id_array);
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior='position' keyboardVerticalOffset={70} enabled>
         <SwipeableListContainer
           id_array={this.props.id_array}
           navigation={this.props.navigation}
         />
-      </View>
+      </KeyboardAvoidingView>
 
 
     );
@@ -38,10 +38,11 @@ class TaskListView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'powderblue',
-    alignSelf: 'stretch'
+    //alignItems: 'center',
+    //justifyContent: 'center',
+    //backgroundColor: '#446482',
+    backgroundColor: '#FFB000'
+    //alignSelf: 'stretch'
   }
 });
 

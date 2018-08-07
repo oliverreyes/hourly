@@ -176,7 +176,7 @@ export function reorderTask(id_array, old_pos, new_pos) {
   let copy_array = id_array.slice();
   //console.log(copy_array);
   copy_array.splice(new_pos, 0, copy_array.splice(old_pos, 1)[0]);
-  //console.log(copy_array);
+  console.log(copy_array);
   return {
     type: REORDER_TASK,
     payload: { new_array: copy_array },

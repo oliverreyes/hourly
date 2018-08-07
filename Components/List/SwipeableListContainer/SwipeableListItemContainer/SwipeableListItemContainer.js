@@ -40,7 +40,7 @@ class SwipeableListItemContainer extends Component {
    * Sets reorder ID and toggles reorder */
   _onLongPress(){
     const this_index = this.props.task_array.indexOf(this.props.item);
-    console.log("LONGPRESS ID: " + this.props.item);
+    //console.log("LONGPRESS ID: " + this.props.item);
     console.log("LONGPRESS INDEX: " + this_index);
     this.props._updateReorderIdx(this_index);
     this.props._toggleReorder();
@@ -63,9 +63,7 @@ class SwipeableListItemContainer extends Component {
       this.props._toggleReorder();
     }
   }
-  /**
-   * Handle response for swiping task list item. Sets panResponder in state.
-   */
+  /* Handle response for swiping task list item. Sets panResponder in state. */
   _onSwipe(){
     this.setState({
       panResponder: this._swipePanResponder()
@@ -136,18 +134,14 @@ class SwipeableListItemContainer extends Component {
   });
   /*
 
-  /**
-   * Completes task by id.
-   */
+  /* Completes task by id. */
   _completeTask() {
     if (!this.props.task_data[this.props.item].isTemp){
       console.log("COMPLETE in swipe");
       this.props.completeTask(this.props.item, 'true');
     }
   }
-  /**
-   * Marks task as incomplete.
-   */
+  /* Marks task as incomplete. */
   _incompleteTask() {
     if (!this.props.task_data[this.props.item].isTemp){
       console.log("INCOMPLETE in swipe");

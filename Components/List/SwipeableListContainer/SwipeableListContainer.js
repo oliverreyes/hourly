@@ -63,7 +63,7 @@ export default class SwipeableListContainer extends React.Component {
       <FlatList
           style={styles.list_style}
           data={this.props.id_array}
-          ListHeaderComponent={<Text style={styles.header}>Tasks</Text>}
+          //ListHeaderComponent={<Text style={styles.header}>Tasks</Text>}
           ItemSeparatorComponent={() => <Separator />}
           scrollEnabled={this.state.scroll_active}
           renderItem={({item}) =>
@@ -92,6 +92,8 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 50,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginLeft: 10,
+    color: '#000000'
   }
 });
