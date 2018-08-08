@@ -31,9 +31,15 @@ class SwipeableListItemContainer extends Component {
     };
     this._completeTask = this._completeTask.bind(this);
     this._incompleteTask = this._incompleteTask.bind(this);
+    this._onPress = this._onPress.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
     //this._swipePanResponder = this._swipePanResponder.bind(this);
     this._onReorderPress = this._onReorderPress.bind(this);
+  }
+
+  _onPress(){
+    this.props.navigation.navigate('TaskView',
+    { data: this.props.task_data[this.props.item] });
   }
 
   /* Handle response for long press on task list item
@@ -160,9 +166,13 @@ class SwipeableListItemContainer extends Component {
               _incompleteTask={this._incompleteTask}
               data={this.props.task_data[this.props.item]}
               navigation={this.props.navigation}
+              _onPress={this._onPress}
               _onLongPress={this._onLongPress}
               pan={this.state.pan}
-              _onReorderPress={this._onReorderPress} />;
+              _onReorderPress={this._onReorderPress}
+              reorder_toggle={this.props.reorder_toggle}
+              idx={this.props.task_array.indexOf(this.props.item)}
+              old_idx={this.props.old_index} />;
   }
 }
 

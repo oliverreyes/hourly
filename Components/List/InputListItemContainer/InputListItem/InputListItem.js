@@ -26,14 +26,14 @@ export default class InputListItem extends Component {
           /> : <TouchableOpacity
             style={styles.input_button}
             onPress={this.props._showTextInput}>
-            <Text style={styles.list_text}>Add Task</Text>
+            <Text style={styles.list_text}>What needs to get done?</Text>
           </TouchableOpacity>
         }
         {
           this.props.show_text_input ? <TouchableOpacity
           style={styles.input_button}
           onPress={this.props._showTextInput}>
-          <Text style={styles.list_text}>Cancel</Text>
+          <Text style={styles.list_text}>Nevermind</Text>
           </TouchableOpacity> : null
         }
     </View>

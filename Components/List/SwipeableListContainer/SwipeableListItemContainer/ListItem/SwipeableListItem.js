@@ -16,7 +16,14 @@ export default class SwipeableListItem extends React.Component {
     console.log(this.props.data);
     return (
       <Animated.View style={[this.props.pan.getLayout()]} {...this.props.panHandlers}>
-        <TouchableHighlight style={styles.list_box} onLongPress={this.props._onLongPress} activeOpacity={0.3} onPress={this.props._onReorderPress} >
+        <TouchableHighlight
+          style={this.props.reorder_toggle && (this.props.old_idx === this.props.idx) ? styles.list_item_reorder : styles.list_item}
+          onPress={this.props.reorder_toggle ?
+            this.props._onReorderPress : this.props._onPress}
+          onLongPress={this.props._onLongPress}
+          //delayLongPress={500}
+          activeOpacity={0.9}
+          underlayColor='#FFECB3' >
           <View >
             <Text numberOfLines={1} style={styles.list_text}>{title}</Text>
           </View>
@@ -27,7 +34,7 @@ export default class SwipeableListItem extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  list_box: {
+  list_item: {
     alignSelf: 'stretch',
     paddingVertical: 10,
     flex: 1,
@@ -39,6 +46,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFB000',
     //borderBottomColor: '#FFECB3',
     //borderBottomWidth: 0.5,
+  },
+  list_item_reorder: {
+    alignSelf: 'stretch',
+    paddingVertical: 10,
+    flex: 1,
+    backgroundColor: '#FFECB3',
   },
   list_text: {
     fontSize: 18,
