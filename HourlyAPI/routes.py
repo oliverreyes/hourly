@@ -87,13 +87,16 @@ def update_task(task_id):
 
     # Get payload
     payload = request.get_json(force=True)
-    print(payload.get('deadline'))
+    deadline = payload.get('deadline')
+    if deadline == 'None':
+        deadline = None
+    print(deadline)
 
     # Query specified task
     task_to_update = Task.query.get(task_id)
     # Replace content in DB with payload
     task_to_update.title = payload.get('title')
-    task_to_update.deadline = payload.get('deadline')
+    task_to_update.deadline = deadline
     task_to_update.notifications = payload.get('notifications')
     task_to_update.exp = payload.get('exp')
     #task_to_update.completed = payload.get('status')

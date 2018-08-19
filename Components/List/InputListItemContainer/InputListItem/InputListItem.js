@@ -26,7 +26,7 @@ export default class InputListItem extends Component {
           /> : <TouchableOpacity
             style={styles.input_button}
             onPress={this.props._showTextInput}>
-            <Text style={styles.list_text}>What needs to get done?</Text>
+            <Text style={styles.list_text}>{"What's next?"}</Text>
           </TouchableOpacity>
         }
         {
@@ -51,7 +51,8 @@ const styles = StyleSheet.create({
     borderTopColor: '#FFECB3',
     marginHorizontal: 10,
     //backgroundColor: '#446482',
-    flex: 1
+    flex: 1,
+    paddingBottom: 150
   },
   input_button: {
 

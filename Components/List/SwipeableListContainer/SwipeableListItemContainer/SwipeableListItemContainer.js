@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { PanResponder, Animated } from 'react-native';
+import { PanResponder, Animated, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import SwipeableListItem from './ListItem/SwipeableListItem';
 import { reorderTask, completeTask } from '../../../../redux/actions/actions';
@@ -26,14 +26,15 @@ class SwipeableListItemContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      panResponder: "",
+      panResponder: this._swipePanResponder(),
       pan: new Animated.ValueXY(),
+      //delayGesture: 40
     };
     this._completeTask = this._completeTask.bind(this);
     this._incompleteTask = this._incompleteTask.bind(this);
     this._onPress = this._onPress.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
-    //this._swipePanResponder = this._swipePanResponder.bind(this);
+    this._swipePanResponder = this._swipePanResponder.bind(this);
     this._onReorderPress = this._onReorderPress.bind(this);
   }
 
@@ -70,30 +71,25 @@ class SwipeableListItemContainer extends Component {
     }
   }
   /* Handle response for swiping task list item. Sets panResponder in state. */
-  _onSwipe(){
+  _onSwipe = () => {
+    console.log("Here");
+
     this.setState({
       panResponder: this._swipePanResponder()
     });
+
+    this.props._toggleScroll();
+    console.log("Swiper no swiping");
   }
   /**
    * Create PanResponder for swiping
    */
-   /*
+
   _swipePanResponder = () => PanResponder.create({
-    onStartShouldSetPanResponderCapture: (e, gestureState) => true,
+    onStartShouldSetPanResponderCapture: (e, gestureState) => false,
     onPanResponderTerminationRequest: (e, gestureState) => false,
-    onPanResponderGrant: (e, gestureState) => {
-      console.log("Granted...");
-      this.state.pan.setOffset({
-        x: this.state.pan.x._value
-      });
-      this.props._toggleScroll();
-
-
-        // The gesture has started. Show visual feedback so the user knows
-        // what is happening!
-
-        // gestureState.d{x,y} will be set to zero now
+    onMoveShouldSetPanResponderCapture: (e, gestureState) => {
+      return gestureState.dx != 0 && gestureState.dy != 0;
     },
     onPanResponderMove: (e, gestureState) => {
       // The most recent move distance is gestureState.move{X,Y}
@@ -101,30 +97,37 @@ class SwipeableListItemContainer extends Component {
       // gestureState.d{x,y}
       //console.log(gestureState.dx, gestureState.dy);
 
+      if (gestureState.dx > 25){
+        this.props._toggleScroll(false);
+        let move_x = gestureState.dx - 25;
+        //this.state.pan.setValue(x: gestureState.dx, y: 0);
+        this.state.pan.setValue({x: move_x, y: 0})
 
+      }
+      /*
       return Animated.event([null, {
-          //dx: this.state.pan.x,
-          dy: this.state.pan.x
+          dx: this.state.pan.x,
+          //dy: this.state.pan.y
         }
       ])(e, gestureState)
+      */
     },
     onPanResponderRelease: (e, gestureState) => {
-      // The user has released all touches while this view is the
-      // responder. This typically means a gesture has succeeded
-      //this.state.pan.flattenOffset();
-      if (this.state.task_index !== new_index){
-        this.props.reorderTask(this.props.item, this.state.task_index, new_index);
+      if (gestureState.dx > 200){
+        Animated.spring(
+          this.state.pan,
+          {toValue: {x:(Dimensions.get('window').width), y:0}}
+        ).start();
+        this.props._toggleScroll(true);
       }
       else {
         Animated.spring(
           this.state.pan,
           {toValue: {x:0, y:0}}
         ).start();
+        this.props._toggleScroll(true);
       }
-      this.setState({
-        panResponder: ""
-      });
-      this.props._toggleScroll();
+
 
       console.log("Finished");
     },
@@ -132,13 +135,9 @@ class SwipeableListItemContainer extends Component {
       // Another component has become the responder, so this gesture
       // should be cancelled
     },
-    onShouldBlockNativeResponder: (e, gestureState) => {
-      // Returns whether this component should block native components from becoming the JS
-      // responder. Returns true by default. Is currently only supported on android.
-      return true;
-    },
+
   });
-  /*
+
 
   /* Completes task by id. */
   _completeTask() {
@@ -168,11 +167,13 @@ class SwipeableListItemContainer extends Component {
               navigation={this.props.navigation}
               _onPress={this._onPress}
               _onLongPress={this._onLongPress}
+              _onSwipe={this._onSwipe}
               pan={this.state.pan}
               _onReorderPress={this._onReorderPress}
               reorder_toggle={this.props.reorder_toggle}
               idx={this.props.task_array.indexOf(this.props.item)}
-              old_idx={this.props.old_index} />;
+              old_idx={this.props.old_index}
+              is_scrolling={this.props.is_scrolling} />;
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, TextInput, TouchableOpacity, DatePickerIOS, Switch } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TextInput, TouchableOpacity, DatePickerIOS, Switch, Image } from 'react-native';
 
 /**
   * Presentational component for task & task options.
@@ -78,11 +78,14 @@ export default class TaskView extends React.Component {
         <View style={[styles.row_container, {justifyContent: 'center'}]}>
         { !this.props.show_input && this.props.modified ? <TouchableOpacity
           onPress={this.props._editTask}>
-          <Text style={[styles.text, {fontWeight: 'bold'}]}>Save</Text>
+          <Text style={[styles.text, {fontWeight: 'bold'}]}>Save Changes</Text>
           </TouchableOpacity>
           : <TouchableOpacity
             onPress={this.props._deleteTask}>
-            <Text style={[styles.text, {fontWeight: 'bold', color: '#FD4F57'}]}>Delete</Text>
+            <Image
+              source={require('../../images/red-delete.png')}
+              style={{height: 35, width: 35}}
+            />
             </TouchableOpacity>
         }
         </View>

@@ -20,7 +20,8 @@ export default class SwipeableListContainer extends React.Component {
     this.state = {
       scroll_active: true,
       reorder_toggle: false,
-      old_index: null
+      old_index: null,
+      is_scrolling: false
     };
     this._toggleScroll = this._toggleScroll.bind(this);
     this._updateReorderIdx = this._updateReorderIdx.bind(this);
@@ -37,10 +38,10 @@ export default class SwipeableListContainer extends React.Component {
   _keyExtractor = (item) => item.toString();
 
   /* Allow or disable list scrolling */
-  _toggleScroll(){
-    this.setState(prevState => ({
-      scroll_active: !prevState.scroll_active
-    }));
+  _toggleScroll(bool){
+    this.setState({
+      scroll_active: bool
+    });
     console.log("SCROLL: " + this.state.scroll_active);
   }
 
@@ -66,15 +67,22 @@ export default class SwipeableListContainer extends React.Component {
           //ListHeaderComponent={<Text style={styles.header}>Tasks</Text>}
           ItemSeparatorComponent={() => <Separator />}
           scrollEnabled={this.state.scroll_active}
+          onScrollBeginDrag={() => this.setState({
+            is_scrolling: true
+          })}
+          onScrollEndDrag={() => this.setState({
+            is_scrolling: false
+          })}
           renderItem={({item}) =>
             <SwipeableListItemContainer
               item={item}
               navigation={this.props.navigation}
-              _toggleScroll={() => this._toggleScroll()}
+              _toggleScroll={bool => this._toggleScroll(bool)}
               reorder_toggle={this.state.reorder_toggle}
               old_index={this.state.old_index}
               _updateReorderIdx={(old_index) => this._updateReorderIdx(old_index)}
               _toggleReorder={() => this._toggleReorder()}
+              is_scrolling={this.state.is_scrolling}
             />
           }
           keyExtractor={this._keyExtractor}
